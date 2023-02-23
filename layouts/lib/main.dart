@@ -14,22 +14,21 @@ class MyApp extends StatelessWidget {
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.teal,
-          //appBar: AppBar(title: Text('App bar'),),
           body: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                  width: 100,
-                  color: Colors.red,
-                ),
+                width: 100,
+                color: Colors.red,
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.yellow,
-                    ),
+                    width: 100,
+                    height: 100,
+                    color: Colors.yellow,
+                  ),
                   Container(
                     width: 100,
                     height: 100,
@@ -38,15 +37,13 @@ class MyApp extends StatelessWidget {
                 ],
               ),
               Container(
-                  width: 100,
-                  color: Colors.blue,
-                ),
+                width: 100,
+                color: Colors.blue,
+              ),
             ],
           ),
         ),
       ),
-      
-
     );
   }
 }
