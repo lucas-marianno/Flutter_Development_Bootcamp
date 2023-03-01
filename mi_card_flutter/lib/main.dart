@@ -1,3 +1,5 @@
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'palette.dart';
@@ -10,6 +12,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        dividerTheme: DividerThemeData(
+          space: 40,
+          color: MyPalette.dividerColor(),
+          indent: 100,
+          endIndent: 100,
+        )
+      ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: MyPalette.primaryColor(),
@@ -37,6 +47,7 @@ class MyApp extends StatelessWidget {
                     ],
                   ),
                 ),
+                Divider(),
                 Text(
                   'flutter developer'.toUpperCase(),
                   style: GoogleFonts.fjallaOne(
@@ -54,11 +65,13 @@ class MyApp extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 50),
+                Divider(),
                 Container(
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(horizontal: 100, vertical: 10),
                   alignment: Alignment.center,
-                  height: 40,
-                  width: 350,
+                  //height: 40,
+                  //width: 350,
                   color: MyPalette.textIconsColor(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -74,9 +87,11 @@ class MyApp extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Container(
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(horizontal: 100, vertical: 10),
                   alignment: Alignment.center,
-                  height: 40,
-                  width: 350,
+                  //height: 40,
+                  //width: 350,
                   color: MyPalette.textIconsColor(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,6 +105,7 @@ class MyApp extends StatelessWidget {
                     ],
                   ),
                 ),
+                ElevatedButton(onPressed: (){}, child: Text('hi'))
               ],
             ),
           ),
