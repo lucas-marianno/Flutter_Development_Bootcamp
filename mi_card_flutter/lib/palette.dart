@@ -16,3 +16,20 @@ class MyPalette{
   
   MyPalette();
 }
+
+ThemeData myTheme = ThemeData(
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      fixedSize: Size(350, 50),
+      textStyle: TextStyle(fontSize: 20),
+      backgroundColor: MyPalette.textIconsColor(),
+      foregroundColor: MyPalette.primaryTextColor(),
+    ),
+  ),
+  dividerTheme: DividerThemeData(
+    space: 40,
+    color: MyPalette.dividerColor(),
+    indent: 100,
+    endIndent: 100,
+  ),
+);
