@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'palette.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
 
 void main() => runApp(const MyApp());
 
@@ -58,7 +61,7 @@ class MyApp extends StatelessWidget {
                 ),
                 Divider(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: ()=> UrlLauncher.launchUrl(Uri(scheme: 'tel', path: '+55(11)99999-9999')),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -75,7 +78,9 @@ class MyApp extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: ()=> UrlLauncher.launchUrl(
+                    Uri.parse('https://github.com/vulture-coding'),
+                    mode: LaunchMode.externalApplication),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -84,9 +89,32 @@ class MyApp extends StatelessWidget {
                         color: MyPalette.primaryTextColor(),
                       ),
                       Text('GitHub/vulture-coding',
-                          style: TextStyle(
-                              color: MyPalette.primaryTextColor(),
-                              fontSize: 20)),
+                        style: TextStyle(
+                          color: MyPalette.primaryTextColor(),
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: ()=> UrlLauncher.launchUrl(
+                    Uri(scheme: 'mailto', path: 'lucas.pk16@outlook.com'),
+                    mode: LaunchMode.externalApplication),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(
+                        Icons.email,
+                        color: MyPalette.primaryTextColor(),
+                      ),
+                      Text('lucas.pk16@outlook.com',
+                        style: TextStyle(
+                          color: MyPalette.primaryTextColor(),
+                          fontSize: 20,
+                        ),
+                      ),
                     ],
                   ),
                 ),
