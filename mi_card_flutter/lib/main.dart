@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'palette.dart';
 
 void main() => runApp(const MyApp());
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.teal,
+        backgroundColor: MyPalette.primaryColor(),
         body: SafeArea(
           // creates a margin from areas like status bar, navigation bar, etc
           child: Center(
@@ -26,10 +27,10 @@ class MyApp extends StatelessWidget {
                   'Lucas Moraes',
                   style: GoogleFonts.lobster(
                     fontSize: 80,
-                    color: Colors.white,
+                    color: MyPalette.textIconsColor(),
                     shadows: [
                       Shadow(
-                        color: Colors.black,
+                        color:MyPalette.darkPrimaryColor(),
                         offset: Offset(1, 1),
                         blurRadius: 5,
                       )
@@ -40,13 +41,13 @@ class MyApp extends StatelessWidget {
                   'flutter developer'.toUpperCase(),
                   style: GoogleFonts.fjallaOne(
                     fontSize: 25,
-                    color: Colors.white,
+                    color: MyPalette.textIconsColor(),
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 3,
+                    letterSpacing: 8,
                     //fontStyle: FontStyle.italic,
                     shadows: [
                       Shadow(
-                        color: Colors.black,
+                        color: MyPalette.darkPrimaryColor(),
                         offset: Offset(1, 1),
                         blurRadius: 5,
                       )
@@ -58,16 +59,16 @@ class MyApp extends StatelessWidget {
                   alignment: Alignment.center,
                   height: 40,
                   width: 350,
-                  color: Colors.white,
+                  color: MyPalette.textIconsColor(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(
                         Icons.phone,
-                        color: Colors.teal,
+                        color:MyPalette.primaryTextColor(),
                       ),
-                      Text('+55 (11) 98964-1709',
-                          style: TextStyle(color: Colors.teal, fontSize: 20)),
+                      Text('+55 (11) 99999-9999',
+                          style: TextStyle(color:MyPalette.primaryTextColor(), fontSize: 20)),
                     ],
                   ),
                 ),
@@ -76,16 +77,16 @@ class MyApp extends StatelessWidget {
                   alignment: Alignment.center,
                   height: 40,
                   width: 350,
-                  color: Colors.white,
+                  color: MyPalette.textIconsColor(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(
                         Icons.email,
-                        color: Colors.teal,
+                        color: MyPalette.primaryTextColor(),
                       ),
                       Text('GitHub/vulture-coding',
-                          style: TextStyle(color: Colors.teal, fontSize: 20)),
+                          style: TextStyle(color: MyPalette.primaryTextColor(), fontSize: 20)),
                     ],
                   ),
                 ),
