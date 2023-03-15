@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'palette.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
-
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -61,61 +60,56 @@ class MyApp extends StatelessWidget {
                 ),
                 Divider(),
                 ElevatedButton(
-                  onPressed: ()=> UrlLauncher.launchUrl(Uri(scheme: 'tel', path: '+55(11)99999-9999')),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.phone,
-                        color: MyPalette.primaryTextColor(),
+                  onPressed: () => UrlLauncher.launchUrl(
+                      Uri(scheme: 'tel', path: '+55(11)99999-9999'),
                       ),
-                      Text('+55 (11) 99999-9999',
-                          style: TextStyle(
-                              color: MyPalette.primaryTextColor(),
-                              fontSize: 20)),
-                    ],
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.phone,
+                      color: MyPalette.primaryTextColor(),
+                    ),
+                    title: Text('+55 (11) 99999-9999',
+                        style: TextStyle(
+                            color: MyPalette.primaryTextColor(), fontSize: 20),
+                            ),
                   ),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: ()=> UrlLauncher.launchUrl(
-                    Uri.parse('https://github.com/vulture-coding'),
-                    mode: LaunchMode.externalApplication),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.open_in_new,
+                  onPressed: () => UrlLauncher.launchUrl(
+                      Uri.parse('https://github.com/vulture-coding'),
+                      mode: LaunchMode.externalApplication),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.open_in_new,
+                      color: MyPalette.primaryTextColor(),
+                    ),
+                    title: Text(
+                      'GitHub/vulture-coding',
+                      style: TextStyle(
                         color: MyPalette.primaryTextColor(),
+                        fontSize: 20,
                       ),
-                      Text('GitHub/vulture-coding',
-                        style: TextStyle(
-                          color: MyPalette.primaryTextColor(),
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: ()=> UrlLauncher.launchUrl(
-                    Uri(scheme: 'mailto', path: 'lucas.pk16@outlook.com'),
-                    mode: LaunchMode.externalApplication),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.email,
+                  onPressed: () => UrlLauncher.launchUrl(
+                      Uri(scheme: 'mailto', path: 'lucas.pk16@outlook.com'),
+                      mode: LaunchMode.externalApplication),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.email,
+                      color: MyPalette.primaryTextColor(),
+                    ),
+                    title: Text(
+                      'lucas.pk16@outlook.com',
+                      style: TextStyle(
                         color: MyPalette.primaryTextColor(),
+                        fontSize: 20,
                       ),
-                      Text('lucas.pk16@outlook.com',
-                        style: TextStyle(
-                          color: MyPalette.primaryTextColor(),
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
