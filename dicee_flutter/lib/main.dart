@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,19 +23,37 @@ class DicePage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Image.asset('images/dice1.png'),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Image.asset('images/dice2.png'),
-            ),
-          )
+          Die(),
+          Die(),
         ],
+      ),
+    );
+  }
+}
+
+class Die extends StatefulWidget {
+  const Die({Key key}) : super(key: key);
+
+  @override
+  State<Die> createState() => _DieState();
+}
+
+class _DieState extends State<Die> {
+  String rnd = '6';
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: TextButton(
+        onPressed: () {
+          setState(() {
+            final newrnd = '${Random().nextInt(6) + 1}';
+            rnd = rnd == newrnd ? '${Random().nextInt(6) + 1}' : newrnd;
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Image.asset('images/dice' + rnd + '.png'),
+        ),
       ),
     );
   }
