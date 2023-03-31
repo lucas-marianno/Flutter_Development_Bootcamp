@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler_flutter/question.dart';
 
 void main() {
-  questions[0];
   runApp(const Quizzler());
 }
 
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
 
   void addCorrectAnswer() {
     setState(() {
-      score.length >= questions.length ? score = [] : null;
+      score.length >= questionaire.length ? score = [] : null;
       score.add(const Icon(
         Icons.check,
         color: Colors.green,
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
 
   void addWrongAnswer() {
     setState(() {
-      score.length >= questions.length ? score = [] : null;
+      score.length >= questionaire.length ? score = [] : null;
       score.add(const Icon(
         Icons.close,
         color: Colors.red,
@@ -51,7 +51,9 @@ class _HomePageState extends State<HomePage> {
 
   void nextQuestion() {
     setState(() {
-      question == questions.length - 1 ? question = 0 : question++;
+      question == questionaire.length - 1
+          ? question = 0
+          : question++;
     });
   }
 
@@ -62,15 +64,15 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Prompt(questions[question][0]),
+          Prompt(questionaire[question].prompt),
           CustomButton(true, function: () {
-            questions[question][1] == true
+            questionaire[question].answer == true
                 ? addCorrectAnswer()
                 : addWrongAnswer();
             nextQuestion();
           }),
           CustomButton(false, function: () {
-            questions[question][1] == false
+            questionaire[question].answer == false
                 ? addCorrectAnswer()
                 : addWrongAnswer();
             nextQuestion();
@@ -153,8 +155,4 @@ class ScoreKeeper extends StatelessWidget {
   }
 }
 
-const List<List> questions = [
-  ['You can lead a cow downstairs but not upstairs', false],
-  ['Approximately one quarter of human bones are in the feet.', true],
-  ['A slug\'s blood is green', true],
-];
+
