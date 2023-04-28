@@ -31,9 +31,9 @@ class _HomePageState extends State<HomePage> {
   List<Widget> score = [];
   int question = 0;
 
-  void addCorrectAnswer() {
+  void _addCorrectAnswer() {
     setState(() {
-      score.length >= QuizBrain.questionaire.length ? score = [] : null;
+      score.length >= QuizBrain.questionaireLength() ? score = [] : null;
       score.add(const Icon(
         Icons.check,
         color: Colors.green,
@@ -41,9 +41,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void addWrongAnswer() {
+  void _addWrongAnswer() {
     setState(() {
-      score.length >= QuizBrain.questionaire.length ? score = [] : null;
+      score.length >= QuizBrain.questionaireLength() ? score = [] : null;
       score.add(const Icon(
         Icons.close,
         color: Colors.red,
@@ -51,11 +51,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void nextQuestion() {
+  void _nextQuestion() {
     setState(() {
-      question == QuizBrain.questionaire.length - 1 ? question = 0 : question++;
+      question == QuizBrain.questionaireLength() - 1
+          ? _displayScore()
+          : question++;
     });
   }
+
+  void _displayScore() => showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Final Score"),
+          content: const Text("content"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  question = 0;
+                  score = [];
+                });
+              },
+              child: const Text("restart quiz"),
+            )
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -66,18 +88,18 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Prompt(QuizBrain.questionaire[question].prompt),
+          Prompt(QuizBrain.questionPrompt(question)),
           CustomButton(true, function: () {
-            QuizBrain.questionaire[question].answer == true
-                ? addCorrectAnswer()
-                : addWrongAnswer();
-            nextQuestion();
+            QuizBrain.questionAnswer(question) == true
+                ? _addCorrectAnswer()
+                : _addWrongAnswer();
+            _nextQuestion();
           }),
           CustomButton(false, function: () {
-            QuizBrain.questionaire[question].answer == false
-                ? addCorrectAnswer()
-                : addWrongAnswer();
-            nextQuestion();
+            QuizBrain.questionAnswer(question) == false
+                ? _addCorrectAnswer()
+                : _addWrongAnswer();
+            _nextQuestion();
           }),
           ScoreKeeper(score),
         ],

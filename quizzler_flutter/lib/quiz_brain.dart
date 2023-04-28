@@ -1,8 +1,13 @@
-import 'question.dart';
+class Question {
+  final String prompt;
+  final bool answer;
+
+  Question(this.prompt, this.answer);
+}
 
 class QuizBrain {
-  static final List<Question> questionaire = [
-    Question('You can lead a cow down stairs but not upstairs', false),
+  static final List<Question> _questionaire = [
+    Question('You can lead a cow downstairs but not upstairs', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
     Question('A slug\'s blood is green', true),
     Question('Some cats are actually allergic to humans', true),
@@ -28,4 +33,14 @@ class QuizBrain {
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
   ];
+
+  static String questionPrompt(int questionNumber) {
+    return _questionaire[questionNumber].prompt;
+  }
+
+  static bool questionAnswer(int questionNumber) {
+    return _questionaire[questionNumber].answer;
+  }
+
+  static int questionaireLength() => _questionaire.length;
 }
