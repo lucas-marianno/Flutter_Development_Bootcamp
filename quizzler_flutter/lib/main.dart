@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quizzler_flutter/question.dart';
+import 'quiz_brain.dart';
+import 'style.dart';
+import 'ui_elements.dart';
 
 void main() {
   runApp(const Quizzler());
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   void addCorrectAnswer() {
     setState(() {
-      score.length >= questionaire.length ? score = [] : null;
+      score.length >= QuizBrain.questionaire.length ? score = [] : null;
       score.add(const Icon(
         Icons.check,
         color: Colors.green,
@@ -41,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   void addWrongAnswer() {
     setState(() {
-      score.length >= questionaire.length ? score = [] : null;
+      score.length >= QuizBrain.questionaire.length ? score = [] : null;
       score.add(const Icon(
         Icons.close,
         color: Colors.red,
@@ -51,28 +53,28 @@ class _HomePageState extends State<HomePage> {
 
   void nextQuestion() {
     setState(() {
-      question == questionaire.length - 1
-          ? question = 0
-          : question++;
+      question == QuizBrain.questionaire.length - 1 ? question = 0 : question++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    /// Builds the application main page Scaffold and positions the UI Elements.
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Prompt(questionaire[question].prompt),
+          Prompt(QuizBrain.questionaire[question].prompt),
           CustomButton(true, function: () {
-            questionaire[question].answer == true
+            QuizBrain.questionaire[question].answer == true
                 ? addCorrectAnswer()
                 : addWrongAnswer();
             nextQuestion();
           }),
           CustomButton(false, function: () {
-            questionaire[question].answer == false
+            QuizBrain.questionaire[question].answer == false
                 ? addCorrectAnswer()
                 : addWrongAnswer();
             nextQuestion();
@@ -83,76 +85,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-class Prompt extends StatelessWidget {
-  final String question;
-  const Prompt(this.question, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 15,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Text(
-            question,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  final bool id;
-  final Function function;
-  const CustomButton(this.id, {required this.function, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final String buttonName = id ? 'True' : 'False';
-    return Expanded(
-      flex: 3,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: id ? Colors.green : Colors.red,
-          ),
-          onPressed: () => function(),
-          child: Text(
-            buttonName,
-            style: const TextStyle(
-              fontSize: 25,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ScoreKeeper extends StatelessWidget {
-  final List<Widget> score;
-  const ScoreKeeper(this.score, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: score,
-        ),
-      ),
-    );
-  }
-}
-
-
