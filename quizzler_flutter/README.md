@@ -1,16 +1,18 @@
 # quizzler_flutter
 
-A new Flutter project.
+A simple quiz app with the goal of learning the basics of Object Oriented Programming
 
-## Getting Started
+## Object Oriented Programing
 
-This project is a starting point for a Flutter application.
+- Abstraction
+- Encapsulation
+- Inheritance
+- Polymorphism
 
-A few resources to get you started if this is your first Flutter project:
+### Abstraction
+Break something complex into smaller pieces
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+The idea is break full tasks into simpler and single task functions. (Instead of a single person doing everything in a restaurant, divide the task with multiple people that will only do that specific task. Eg: cleaner, waiter, chef, host and etc.)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Encapsulation
+Prevent one object from interfering with another's task. 
