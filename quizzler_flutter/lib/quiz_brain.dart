@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Question {
   final String prompt;
   final bool answer;
@@ -6,6 +8,9 @@ class Question {
 }
 
 class QuizBrain {
+  static int _questionNumber = 0;
+  static List<Widget> _score = [];
+
   static final List<Question> _questionaire = [
     Question('You can lead a cow downstairs but not upstairs', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
@@ -34,13 +39,66 @@ class QuizBrain {
         true),
   ];
 
-  static String questionPrompt(int questionNumber) {
-    return _questionaire[questionNumber].prompt;
+  static String questionPrompt() {
+    return _questionaire[_questionNumber].prompt;
   }
 
-  static bool questionAnswer(int questionNumber) {
-    return _questionaire[questionNumber].answer;
+  static bool questionAnswer() {
+    return _questionaire[_questionNumber].answer;
   }
 
   static int questionaireLength() => _questionaire.length;
+
+  static int questionNumber() => _questionNumber;
+
+  static void nextQuestion() {
+    if (_questionNumber == _questionaire.length - 1) {
+      // TODO: call displayScore();
+    } else {
+      _questionNumber++;
+    }
+  }
+
+/*
+
+TODO: fix this
+  static void displayScore() => showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Final Score"),
+          content: const Text("content"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  QuizBrain.resetQuestionNumber();
+                  _score = [];
+                });
+              },
+              child: const Text("restart quiz"),
+            )
+          ],
+        ),
+      );
+*/
+  static void resetQuestionNumber() => _questionNumber = 0;
+
+  static List<Widget> getScore() => _score;
+
+  static void addCorrectAnswer() {
+    _score.length >= QuizBrain.questionaireLength() ? _score = [] : null;
+    _score.add(const Icon(
+      Icons.check,
+      color: Colors.green,
+    ));
+  }
+
+  static void addWrongAnswer() {
+    _score.length >= QuizBrain.questionaireLength() ? _score = [] : null;
+    _score.add(const Icon(
+      Icons.close,
+      color: Colors.red,
+    ));
+  }
 }

@@ -28,80 +28,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Widget> score = [];
-  int question = 0;
-
-  void _addCorrectAnswer() {
-    setState(() {
-      score.length >= QuizBrain.questionaireLength() ? score = [] : null;
-      score.add(const Icon(
-        Icons.check,
-        color: Colors.green,
-      ));
-    });
-  }
-
-  void _addWrongAnswer() {
-    setState(() {
-      score.length >= QuizBrain.questionaireLength() ? score = [] : null;
-      score.add(const Icon(
-        Icons.close,
-        color: Colors.red,
-      ));
-    });
-  }
-
-  void _nextQuestion() {
-    setState(() {
-      question == QuizBrain.questionaireLength() - 1
-          ? _displayScore()
-          : question++;
-    });
-  }
-
-  void _displayScore() => showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text("Final Score"),
-          content: const Text("content"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {
-                  question = 0;
-                  score = [];
-                });
-              },
-              child: const Text("restart quiz"),
-            )
-          ],
-        ),
-      );
+  // List<Widget> _score = [];
+  // int _questionNumber = 0;
 
   @override
   Widget build(BuildContext context) {
-    /// Builds the application main page Scaffold and positions the UI Elements.
+    /// Builds the application Main Page Scaffold and positions the UI Elements.
 
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Prompt(QuizBrain.questionPrompt(question)),
+          Prompt(QuizBrain.questionPrompt()),
           CustomButton(true, function: () {
-            QuizBrain.questionAnswer(question) == true
-                ? _addCorrectAnswer()
-                : _addWrongAnswer();
-            _nextQuestion();
+            QuizBrain.questionAnswer() == true
+                ? QuizBrain.addCorrectAnswer()
+                : QuizBrain.addWrongAnswer();
+            QuizBrain.nextQuestion();
           }),
           CustomButton(false, function: () {
-            QuizBrain.questionAnswer(question) == false
-                ? _addCorrectAnswer()
-                : _addWrongAnswer();
-            _nextQuestion();
+            QuizBrain.questionAnswer() == false
+                ? QuizBrain.addCorrectAnswer()
+                : QuizBrain.addWrongAnswer();
+            QuizBrain.nextQuestion();
           }),
-          ScoreKeeper(score),
+          ScoreKeeper(QuizBrain.getScore()),
         ],
       ),
     );

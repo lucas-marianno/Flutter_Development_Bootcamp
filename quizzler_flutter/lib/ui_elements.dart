@@ -25,6 +25,8 @@ class Prompt extends StatelessWidget {
 }
 
 class ScoreKeeper extends StatelessWidget {
+  // Creates a Widget that stores the answers right or wrong in a row of icons
+
   final List<Widget> score;
   const ScoreKeeper(this.score, {super.key});
 
