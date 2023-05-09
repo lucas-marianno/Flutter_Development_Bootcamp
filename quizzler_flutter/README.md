@@ -1,4 +1,4 @@
-# quizzler_flutter
+# Quizzler
 
 A simple quiz app with the goal of learning the basics of Object Oriented Programming
 
