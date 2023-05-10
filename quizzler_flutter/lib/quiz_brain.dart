@@ -5,7 +5,7 @@ class Question {
   final String prompt;
   final bool answer;
   
-  Question(this.prompt, this.answer);
+  const Question(this.prompt, this.answer);
 }
 
 Map<String, int> test = {'a': 2};
@@ -13,10 +13,12 @@ Map<String, int> test = {'a': 2};
 
 
 class QuizBrain {
+  // Encapsulates all the functionalities of the quiz
+  
   // Private Variables:
   static int _questionNumber = 0;
   static List<Widget> _score = [];
-  static final List<Question> _questionaire = [
+  static const List<Question> _questionaire = [
     Question('You can lead a cow downstairs but not upstairs', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
     Question('A slug\'s blood is green', true),
@@ -50,14 +52,12 @@ class QuizBrain {
     _score = [];
   }
   static void _addCorrectAnswer() {
-    _score.length >= _questionaire.length ? _score = [] : null;
     _score.add(const Icon(
       Icons.check,
       color: Colors.green,
     ));
   }
   static void _addWrongAnswer() {
-    _score.length >= _questionaire.length ? _score = [] : null;
     _score.add(const Icon(
       Icons.close,
       color: Colors.red,
@@ -68,13 +68,13 @@ class QuizBrain {
   static List<Widget> getScore() => _score;
   static String getQuestionPrompt() => _questionaire[_questionNumber].prompt;
   static bool getQuestionAnswer() => _questionaire[_questionNumber].answer; 
-  static void getNextQuestion() {
-    if (_questionNumber == _questionaire.length - 1) {
+  static void nextQuestion() {
+    if (_questionNumber < _questionaire.length-1) {
+      _questionNumber++;
+    } else {
       // TODO: fix this
       // displayScore(context);
       _resetQuestionNumber();
-    } else {
-      _questionNumber++;
     }
   }
 
@@ -97,6 +97,6 @@ class QuizBrain {
 
   static void checkAnswer(bool id){
     id == getQuestionAnswer() ? _addCorrectAnswer() : _addWrongAnswer();
-    getNextQuestion();
+    nextQuestion();
   }
 }
