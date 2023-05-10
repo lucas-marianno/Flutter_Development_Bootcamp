@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'quiz_brain.dart';
-import 'style.dart';
 import 'ui_elements.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const Quizzler());

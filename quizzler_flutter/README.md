@@ -32,3 +32,27 @@ Gives a class the hability to not only inherit but also modify the inherited pro
 The keyword ***@override*** allows the child class to rewrite a property or method from its parent class.
 
 The keyword ***super.*** allows the child class to reuse its parent property or method even after *overriding* it.
+
+## Class Organization Pattern
+Some common patterns for organizing private and public parameters and methods within a Dart class:
+
+- Public methods should be placed at the top of the class, followed by private methods. This makes it easy for users of the class to find and use the public methods, which are typically the most important methods for interacting with the class.
+
+- Public variables should also be placed at the top of the class, followed by private variables. This helps users of the class quickly understand the properties of the class and how they can interact with them.
+
+- Private variables and methods should be marked with an underscore (_) prefix. This indicates to other developers that these variables and methods are intended for internal use only and should not be accessed from outside the class.
+
+- Related methods and variables should be grouped together. For example, all methods related to input validation or data manipulation should be grouped together.
+
+- Finally, the constructor should be placed at the top of the class, followed by any other public methods and variables. This makes it clear to users of the class how to create and use instances of the class.
+
+The main goal is to make the class interface as easy to use and understand as possible, while also ensuring that the implementation details of the class are hidden from users of the class.
+
+Example:
+
+publicMethod ()=> 'this is public';
+_privateMethod ()=> 'this is private;
+publicVariable = 0;
+_privateVariable = 0;
+
+

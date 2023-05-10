@@ -12,7 +12,52 @@ Map<String, int> test = {'a': 2};
 class QuizBrain {
   // Encapsulates all the functionalities of the quiz
 
-  // Private Variables:
+  // Public Methods:
+  static List<Widget> getScoreWidgetList() => _scoreWidgetList;
+  static String getQuestionPrompt() => _questionaire[_questionNumber].prompt;
+  static bool isQuizEnd() => _quizEnd;
+  static String getFinalScore() {
+    return 'You answered correctly $_score questions out of ${_questionaire.length}.';
+  }
+
+  static void resetQuiz() {
+    _questionNumber = 0;
+    _scoreWidgetList = [];
+    _score = 0;
+    _quizEnd = false;
+  }
+
+  static void checkAnswer(bool id) {
+    id == _getQuestionAnswer() ? _addCorrectAnswer() : _addWrongAnswer();
+    _nextQuestion();
+  }
+
+  // Private Methods:
+  static bool _getQuestionAnswer() => _questionaire[_questionNumber].answer;
+  static void _nextQuestion() {
+    if (_questionNumber < _questionaire.length - 1) {
+      _questionNumber++;
+    } else {
+      _quizEnd = true;
+    }
+  }
+
+  static void _addCorrectAnswer() {
+    _score++;
+    _scoreWidgetList.add(const Icon(
+      Icons.check,
+      color: Colors.green,
+    ));
+  }
+
+  static void _addWrongAnswer() {
+    _scoreWidgetList.add(const Icon(
+      Icons.close,
+      color: Colors.red,
+    ));
+  }
+
+  // Private Parameters:
   static int _questionNumber = 0;
   static List<Widget> _scoreWidgetList = [];
   static int _score = 0;
@@ -44,49 +89,4 @@ class QuizBrain {
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
   ];
-
-  // Private Functions:
-  static void _addCorrectAnswer() {
-    _score++;
-    _scoreWidgetList.add(const Icon(
-      Icons.check,
-      color: Colors.green,
-    ));
-  }
-
-  static void _addWrongAnswer() {
-    _scoreWidgetList.add(const Icon(
-      Icons.close,
-      color: Colors.red,
-    ));
-  }
-
-  // Public Functions:
-  static List<Widget> getScoreWidgetList() => _scoreWidgetList;
-  static String getQuestionPrompt() => _questionaire[_questionNumber].prompt;
-  static bool getQuestionAnswer() => _questionaire[_questionNumber].answer;
-  static bool isQuizEnd() => _quizEnd;
-  static String getFinalScore() {
-    return 'You answered correctly $_score questions out of ${_questionaire.length}.';
-  }
-
-  static void resetQuiz() {
-    _questionNumber = 0;
-    _scoreWidgetList = [];
-    _score = 0;
-    _quizEnd = false;
-  }
-
-  static void nextQuestion() {
-    if (_questionNumber < _questionaire.length - 1) {
-      _questionNumber++;
-    } else {
-      _quizEnd = true;
-    }
-  }
-
-  static void checkAnswer(bool id) {
-    id == getQuestionAnswer() ? _addCorrectAnswer() : _addWrongAnswer();
-    nextQuestion();
-  }
 }
