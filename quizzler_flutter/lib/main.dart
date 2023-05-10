@@ -28,8 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // List<Widget> _score = [];
-  // int _questionNumber = 0;
+  void _update()=> setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +39,9 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Prompt(QuizBrain.questionPrompt()),
-          CustomButton(true, function: () {
-            QuizBrain.questionAnswer() == true
-                ? QuizBrain.addCorrectAnswer()
-                : QuizBrain.addWrongAnswer();
-            QuizBrain.nextQuestion();
-          }),
-          CustomButton(false, function: () {
-            QuizBrain.questionAnswer() == false
-                ? QuizBrain.addCorrectAnswer()
-                : QuizBrain.addWrongAnswer();
-            QuizBrain.nextQuestion();
-          }),
+          Prompt(QuizBrain.getQuestionPrompt()),
+          CustomButton(true, function: _update),
+          CustomButton(false, function: _update),
           ScoreKeeper(QuizBrain.getScore()),
         ],
       ),

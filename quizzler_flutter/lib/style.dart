@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'quiz_brain.dart';
 
 class CustomButton extends StatelessWidget {
   final bool id;
@@ -16,7 +17,9 @@ class CustomButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: id ? Colors.green : Colors.red,
           ),
-          onPressed: () => function(),
+          onPressed: () {
+            QuizBrain.checkAnswer(id);
+            function();},
           child: Text(
             buttonName,
             style: const TextStyle(
