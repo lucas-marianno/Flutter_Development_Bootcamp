@@ -1,23 +1,22 @@
-
 import 'package:flutter/material.dart';
 
 class Question {
   final String prompt;
   final bool answer;
-  
+
   const Question(this.prompt, this.answer);
 }
 
 Map<String, int> test = {'a': 2};
 
-
-
 class QuizBrain {
   // Encapsulates all the functionalities of the quiz
-  
+
   // Private Variables:
   static int _questionNumber = 0;
-  static List<Widget> _score = [];
+  static List<Widget> _scoreWidgetList = [];
+  static int _score = 0;
+  static bool _quizEnd = false;
   static const List<Question> _questionaire = [
     Question('You can lead a cow downstairs but not upstairs', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
@@ -47,55 +46,46 @@ class QuizBrain {
   ];
 
   // Private Functions:
-  static void _resetQuestionNumber() {
-    _questionNumber = 0;
-    _score = [];
-  }
   static void _addCorrectAnswer() {
-    _score.add(const Icon(
+    _score++;
+    _scoreWidgetList.add(const Icon(
       Icons.check,
       color: Colors.green,
     ));
   }
+
   static void _addWrongAnswer() {
-    _score.add(const Icon(
+    _scoreWidgetList.add(const Icon(
       Icons.close,
       color: Colors.red,
     ));
   }
 
   // Public Functions:
-  static List<Widget> getScore() => _score;
+  static List<Widget> getScoreWidgetList() => _scoreWidgetList;
   static String getQuestionPrompt() => _questionaire[_questionNumber].prompt;
-  static bool getQuestionAnswer() => _questionaire[_questionNumber].answer; 
+  static bool getQuestionAnswer() => _questionaire[_questionNumber].answer;
+  static bool isQuizEnd() => _quizEnd;
+  static String getFinalScore() {
+    return 'You answered correctly $_score questions out of ${_questionaire.length}.';
+  }
+
+  static void resetQuiz() {
+    _questionNumber = 0;
+    _scoreWidgetList = [];
+    _score = 0;
+    _quizEnd = false;
+  }
+
   static void nextQuestion() {
-    if (_questionNumber < _questionaire.length-1) {
+    if (_questionNumber < _questionaire.length - 1) {
       _questionNumber++;
     } else {
-      // TODO: fix this
-      // displayScore(context);
-      _resetQuestionNumber();
+      _quizEnd = true;
     }
   }
 
-  //TODO: fix this
-  static void displayScore(ctxt) => showDialog(
-    context: ctxt,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text("Final Score"),
-      content: const Text("content"),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text("restart quiz"),
-        )
-      ],
-    ),
-  );
-
-  static void checkAnswer(bool id){
+  static void checkAnswer(bool id) {
     id == getQuestionAnswer() ? _addCorrectAnswer() : _addWrongAnswer();
     nextQuestion();
   }

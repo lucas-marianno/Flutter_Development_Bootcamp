@@ -28,7 +28,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void _update()=> setState(() {});
+  void _update() => setState(() => _checkQuizEnd());
+
+  void _checkQuizEnd() {
+    if (QuizBrain.isQuizEnd()) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Final Score"),
+          content: Text(QuizBrain.getFinalScore()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                QuizBrain.resetQuiz();
+                _update();
+                Navigator.pop(context);
+              },
+              child: const Text("restart quiz"),
+            )
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +64,7 @@ class _HomePageState extends State<HomePage> {
           Prompt(QuizBrain.getQuestionPrompt()),
           CustomButton(true, function: _update),
           CustomButton(false, function: _update),
-          ScoreKeeper(QuizBrain.getScore()),
+          ScoreKeeper(QuizBrain.getScoreWidgetList()),
         ],
       ),
     );
