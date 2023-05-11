@@ -1,3 +1,4 @@
+import 'package:bmi_calculator/style.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const BMICalculator());
@@ -7,9 +8,10 @@ class BMICalculator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: colorPalette(),
       debugShowCheckedModeBanner: false,
-      home: InputPage(),
+      home: const InputPage(),
     );
   }
 }
