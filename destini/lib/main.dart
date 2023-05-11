@@ -20,6 +20,41 @@ class StoryPage extends StatefulWidget {
 }
 
 class _StoryPageState extends State<StoryPage> {
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Select Language"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  storyBrain.setLanguage('English');
+                  storyBrain = StoryBrain();
+                });
+                Navigator.pop(context);
+              },
+              child: const Text("English"),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  storyBrain.setLanguage('Português');
+                  storyBrain = StoryBrain();
+                });
+                Navigator.pop(context);
+              },
+              child: const Text("Português"),
+            )
+          ],
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
