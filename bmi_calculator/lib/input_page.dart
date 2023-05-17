@@ -1,5 +1,6 @@
 import 'package:bmi_calculator/style.dart';
 import 'package:flutter/material.dart';
+import 'custom_widgets.dart';
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -20,37 +21,45 @@ class _InputPageState extends State<InputPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  MyWidget(
-                    child: Text('data'),
+      body: MyColumn(
+        children: [
+          const Expanded(
+            flex: 10,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: MyColumn(
+                children: [
+                  Expanded(
+                    child: MyRow(
+                      children: [
+                        MyWidget(child: Text('data')),
+                        MyWidget(),
+                      ],
+                    ),
                   ),
                   MyWidget(),
+                  Expanded(
+                    child: MyRow(
+                      children: [
+                        MyWidget(),
+                        MyWidget(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            const MyWidget(),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  MyWidget(),
-                  MyWidget(),
-                ],
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Text(
+                'CALCULATE',
+                style: Palette.titleTextStyle,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
