@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'style.dart';
 
-class MyWidget extends StatelessWidget {
+class ExpandedContainer extends StatelessWidget {
   final Widget? child;
   final Color? backgroundColor;
 
-  const MyWidget({super.key, this.child, this.backgroundColor});
+  const ExpandedContainer({super.key, this.child, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,9 @@ class MyWidget extends StatelessWidget {
   }
 }
 
-class MyColumn extends StatelessWidget {
+class StretchedColumn extends StatelessWidget {
   final List<Widget> children;
-  const MyColumn({super.key, required this.children});
+  const StretchedColumn({super.key, required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,9 @@ class MyColumn extends StatelessWidget {
   }
 }
 
-class MyRow extends StatelessWidget {
+class StretchedRow extends StatelessWidget {
   final List<Widget> children;
-  const MyRow({super.key, required this.children});
+  const StretchedRow({super.key, required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +46,32 @@ class MyRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: children,
+    );
+  }
+}
+
+class GenderCard extends StatelessWidget {
+  final bool? isFemale;
+  const GenderCard({super.key, this.isFemale});
+
+  @override
+  Widget build(BuildContext context) {
+    final bool gender = isFemale ?? false;
+    return ExpandedContainer(
+      child: StretchedColumn(
+        children: [
+          Icon(
+            gender ? Icons.female : Icons.male,
+            size: 80,
+          ),
+          const SizedBox(height: 20),
+          Center(
+              child: Text(
+            gender ? "Female" : "Male",
+            style: Palette.titleTextStyle,
+          )),
+        ],
+      ),
     );
   }
 }

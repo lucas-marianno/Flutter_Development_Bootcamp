@@ -21,28 +21,29 @@ class _InputPageState extends State<InputPage> {
           ),
         ),
       ),
-      body: MyColumn(
+      body: StretchedColumn(
         children: [
           const Expanded(
+            // Body
             flex: 10,
             child: Padding(
               padding: EdgeInsets.all(10),
-              child: MyColumn(
+              child: StretchedColumn(
                 children: [
                   Expanded(
-                    child: MyRow(
+                    child: StretchedRow(
                       children: [
-                        MyWidget(child: Text('data')),
-                        MyWidget(),
+                        GenderCard(),
+                        GenderCard(isFemale: true),
                       ],
                     ),
                   ),
-                  MyWidget(),
+                  ExpandedContainer(),
                   Expanded(
-                    child: MyRow(
+                    child: StretchedRow(
                       children: [
-                        MyWidget(),
-                        MyWidget(),
+                        ExpandedContainer(),
+                        ExpandedContainer(),
                       ],
                     ),
                   ),
@@ -51,6 +52,7 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           Expanded(
+            // Calculate button
             child: ElevatedButton(
               onPressed: () {},
               child: const Text(
