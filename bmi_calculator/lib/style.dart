@@ -4,6 +4,8 @@ class Palette {
   static const Color navyPurple = Color(0XFF0A0E21);
   static const Color navyPurpleAccent = Color(0xff1d1e33);
   static const Color pinkish = Color(0xffeb1555);
+  static const Color textActive = Colors.white;
+  static const Color textInactive = Color(0xff8d8e98);
 
   static const TextStyle titleTextStyle = TextStyle(
     color: Colors.white,

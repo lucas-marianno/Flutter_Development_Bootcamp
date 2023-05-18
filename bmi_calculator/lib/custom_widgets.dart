@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'style.dart';
 
 class ExpandedContainer extends StatelessWidget {
@@ -61,8 +62,8 @@ class GenderCard extends StatelessWidget {
       child: StretchedColumn(
         children: [
           Icon(
-            gender ? Icons.female : Icons.male,
-            size: 80,
+            gender ? FontAwesomeIcons.venus : FontAwesomeIcons.mars,
+            size: 70,
           ),
           const SizedBox(height: 20),
           Center(
