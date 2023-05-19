@@ -1,3 +1,4 @@
+import 'package:bmi_calculator/input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'style.dart';
@@ -58,7 +59,7 @@ class GenderCard extends StatelessWidget {
   static const double _iconSize = 70;
   static const double _gap = 20;
 
-  final String gender;
+  final Gender gender;
   final Color backgroundColor;
   final Function callbackFunction;
   const GenderCard(this.gender, this.backgroundColor, this.callbackFunction,
@@ -66,25 +67,21 @@ class GenderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    IconData icon = gender == Gender.female
+        ? FontAwesomeIcons.venus
+        : FontAwesomeIcons.mars;
+    String label = gender == Gender.female ? "Female" : "Male";
+
     return Expanded(
       child: GestureDetector(
-        onTap: () => callbackFunction(),
+        onTap: () => callbackFunction(gender),
         child: ExpandedContainer(
           backgroundColor: backgroundColor,
           child: StretchedColumn(
             children: [
-              Icon(
-                gender.toLowerCase() == 'female'
-                    ? FontAwesomeIcons.venus
-                    : FontAwesomeIcons.mars,
-                size: _iconSize,
-              ),
+              Icon(icon, size: _iconSize),
               const SizedBox(height: _gap),
-              Center(
-                  child: Text(
-                gender,
-                style: Palette.titleTextStyle,
-              )),
+              Center(child: Text(label, style: Palette.titleTextStyle)),
             ],
           ),
         ),

@@ -2,6 +2,11 @@ import 'package:bmi_calculator/style.dart';
 import 'package:flutter/material.dart';
 import 'custom_widgets.dart';
 
+enum Gender {
+  male,
+  female,
+}
+
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
 
@@ -13,13 +18,13 @@ class _InputPageState extends State<InputPage> {
   Color maleCardColor = Palette.inactiveCardColor;
   Color femaleCardColor = Palette.inactiveCardColor;
 
-  void _updateColor(int gender) {
+  void _updateColor(Gender gender) {
+    // Toggles the gender cards colors
     setState(() {
-      // 1 = male | 2 = female
-      if (gender == 1) {
+      if (gender == Gender.male) {
         maleCardColor = Palette.activeCardColor;
         femaleCardColor = Palette.inactiveCardColor;
-      } else if (gender == 2) {
+      } else if (gender == Gender.female) {
         femaleCardColor = Palette.activeCardColor;
         maleCardColor = Palette.inactiveCardColor;
       }
@@ -49,10 +54,9 @@ class _InputPageState extends State<InputPage> {
                   Expanded(
                     child: StretchedRow(
                       children: [
+                        GenderCard(Gender.male, maleCardColor, _updateColor),
                         GenderCard(
-                            "Male", maleCardColor, () => _updateColor(1)),
-                        GenderCard(
-                            "Female", femaleCardColor, () => _updateColor(2)),
+                            Gender.female, femaleCardColor, _updateColor),
                       ],
                     ),
                   ),
