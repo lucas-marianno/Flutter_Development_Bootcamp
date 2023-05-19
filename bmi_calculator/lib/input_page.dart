@@ -10,6 +10,22 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  Color maleCardColor = Palette.inactiveCardColor;
+  Color femaleCardColor = Palette.inactiveCardColor;
+
+  void _updateColor(int gender) {
+    setState(() {
+      // 1 = male | 2 = female
+      if (gender == 1) {
+        maleCardColor = Palette.activeCardColor;
+        femaleCardColor = Palette.inactiveCardColor;
+      } else if (gender == 2) {
+        femaleCardColor = Palette.activeCardColor;
+        maleCardColor = Palette.inactiveCardColor;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,23 +39,25 @@ class _InputPageState extends State<InputPage> {
       ),
       body: StretchedColumn(
         children: [
-          const Expanded(
+          Expanded(
             // Body
             flex: 10,
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: StretchedColumn(
                 children: [
                   Expanded(
                     child: StretchedRow(
                       children: [
-                        GenderCard(),
-                        GenderCard(isFemale: true),
+                        GenderCard(
+                            "Male", maleCardColor, () => _updateColor(1)),
+                        GenderCard(
+                            "Female", femaleCardColor, () => _updateColor(2)),
                       ],
                     ),
                   ),
-                  ExpandedContainer(),
-                  Expanded(
+                  const ExpandedContainer(),
+                  const Expanded(
                     child: StretchedRow(
                       children: [
                         ExpandedContainer(),

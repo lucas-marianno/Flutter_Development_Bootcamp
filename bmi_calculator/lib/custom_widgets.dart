@@ -3,6 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'style.dart';
 
 class ExpandedContainer extends StatelessWidget {
+  static const double _margin = 10;
+  static const double _borderRadius = 10;
+
   final Widget? child;
   final Color? backgroundColor;
 
@@ -12,10 +15,10 @@ class ExpandedContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(_margin),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: backgroundColor ?? Palette.navyPurpleAccent,
+          borderRadius: BorderRadius.circular(_borderRadius),
+          color: backgroundColor ?? Palette.activeCardColor,
         ),
         child: Center(child: child),
       ),
@@ -52,26 +55,39 @@ class StretchedRow extends StatelessWidget {
 }
 
 class GenderCard extends StatelessWidget {
-  final bool? isFemale;
-  const GenderCard({super.key, this.isFemale});
+  static const double _iconSize = 70;
+  static const double _gap = 20;
+
+  final String gender;
+  final Color backgroundColor;
+  final Function callbackFunction;
+  const GenderCard(this.gender, this.backgroundColor, this.callbackFunction,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool gender = isFemale ?? false;
-    return ExpandedContainer(
-      child: StretchedColumn(
-        children: [
-          Icon(
-            gender ? FontAwesomeIcons.venus : FontAwesomeIcons.mars,
-            size: 70,
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => callbackFunction(),
+        child: ExpandedContainer(
+          backgroundColor: backgroundColor,
+          child: StretchedColumn(
+            children: [
+              Icon(
+                gender.toLowerCase() == 'female'
+                    ? FontAwesomeIcons.venus
+                    : FontAwesomeIcons.mars,
+                size: _iconSize,
+              ),
+              const SizedBox(height: _gap),
+              Center(
+                  child: Text(
+                gender,
+                style: Palette.titleTextStyle,
+              )),
+            ],
           ),
-          const SizedBox(height: 20),
-          Center(
-              child: Text(
-            gender ? "Female" : "Male",
-            style: Palette.titleTextStyle,
-          )),
-        ],
+        ),
       ),
     );
   }
