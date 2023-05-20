@@ -1,11 +1,8 @@
-import 'package:bmi_calculator/style.dart';
 import 'package:flutter/material.dart';
 import 'custom_widgets.dart';
+import 'constants.dart';
 
-enum Gender {
-  male,
-  female,
-}
+enum Gender { male, female, none }
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -15,19 +12,13 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Color maleCardColor = Palette.inactiveCardColor;
-  Color femaleCardColor = Palette.inactiveCardColor;
+  Gender selectedGender = Gender.none;
+  int height = 165;
 
   void _updateColor(Gender gender) {
-    // Toggles the gender cards colors
+    // Toggles genderCard colors
     setState(() {
-      if (gender == Gender.male) {
-        maleCardColor = Palette.activeCardColor;
-        femaleCardColor = Palette.inactiveCardColor;
-      } else if (gender == Gender.female) {
-        femaleCardColor = Palette.activeCardColor;
-        maleCardColor = Palette.inactiveCardColor;
-      }
+      selectedGender = gender;
     });
   }
 
@@ -48,19 +39,57 @@ class _InputPageState extends State<InputPage> {
             // Body
             flex: 10,
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(kPadding),
               child: StretchedColumn(
                 children: [
                   Expanded(
                     child: StretchedRow(
                       children: [
-                        GenderCard(Gender.male, maleCardColor, _updateColor),
-                        GenderCard(
-                            Gender.female, femaleCardColor, _updateColor),
+                        GenderCard(Gender.male, selectedGender, _updateColor),
+                        GenderCard(Gender.female, selectedGender, _updateColor),
                       ],
                     ),
                   ),
-                  const ExpandedContainer(),
+                  ExpandedContainer(
+                    child: StretchedColumn(children: [
+                      const Text(
+                        "HEIGHT",
+                        style: kTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+
+                        /// textBaseline MUST BE specified in order to use
+                        /// .baseline alignment. Otherwise, flutter won't know
+                        /// which baseline to align against.
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            height.toString(),
+                            style: kBoldTextStyle,
+                            textAlign: TextAlign.center,
+                          ),
+                          const Text(
+                            'cm',
+                            style: kTextStyle,
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
+                      Slider(
+                        value: height.toDouble(),
+                        onChanged: (double n) {
+                          setState(() {
+                            height = n.toInt();
+                          });
+                        },
+                        min: kMinHeight,
+                        max: kMaxHeight,
+                      ),
+                    ]),
+                  ),
                   const Expanded(
                     child: StretchedRow(
                       children: [
@@ -79,7 +108,7 @@ class _InputPageState extends State<InputPage> {
               onPressed: () {},
               child: const Text(
                 'CALCULATE',
-                style: Palette.titleTextStyle,
+                style: kTextStyle,
               ),
             ),
           ),

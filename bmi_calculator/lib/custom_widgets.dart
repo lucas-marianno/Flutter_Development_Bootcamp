@@ -1,12 +1,9 @@
 import 'package:bmi_calculator/input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'style.dart';
+import 'constants.dart';
 
 class ExpandedContainer extends StatelessWidget {
-  static const double _margin = 10;
-  static const double _borderRadius = 10;
-
   final Widget? child;
   final Color? backgroundColor;
 
@@ -16,12 +13,46 @@ class ExpandedContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.all(_margin),
+        margin: const EdgeInsets.all(kMargin),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(_borderRadius),
-          color: backgroundColor ?? Palette.activeCardColor,
+          borderRadius: BorderRadius.circular(kBorderRadius),
+          color: backgroundColor ?? kActiveCardColor,
         ),
         child: Center(child: child),
+      ),
+    );
+  }
+}
+
+class GenderCard extends StatelessWidget {
+  final Gender gender;
+  final Gender activeGender;
+  final Function callbackFunction;
+
+  const GenderCard(this.gender, this.activeGender, this.callbackFunction,
+      {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    IconData icon = gender == Gender.female
+        ? FontAwesomeIcons.venus
+        : FontAwesomeIcons.mars;
+    String label = gender == Gender.male ? "MALE" : "FEMALE";
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => callbackFunction(gender),
+        child: ExpandedContainer(
+          backgroundColor:
+              activeGender == gender ? kActiveCardColor : kInactiveCardColor,
+          child: StretchedColumn(
+            children: [
+              Icon(icon, size: kIconSize),
+              const SizedBox(height: kGap),
+              Center(child: Text(label, style: kTextStyle)),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -51,41 +82,6 @@ class StretchedRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: children,
-    );
-  }
-}
-
-class GenderCard extends StatelessWidget {
-  static const double _iconSize = 70;
-  static const double _gap = 20;
-
-  final Gender gender;
-  final Color backgroundColor;
-  final Function callbackFunction;
-  const GenderCard(this.gender, this.backgroundColor, this.callbackFunction,
-      {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    IconData icon = gender == Gender.female
-        ? FontAwesomeIcons.venus
-        : FontAwesomeIcons.mars;
-    String label = gender == Gender.female ? "Female" : "Male";
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => callbackFunction(gender),
-        child: ExpandedContainer(
-          backgroundColor: backgroundColor,
-          child: StretchedColumn(
-            children: [
-              Icon(icon, size: _iconSize),
-              const SizedBox(height: _gap),
-              Center(child: Text(label, style: Palette.titleTextStyle)),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
