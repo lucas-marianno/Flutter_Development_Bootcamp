@@ -58,6 +58,52 @@ class GenderCard extends StatelessWidget {
   }
 }
 
+class HeightWidget extends StatelessWidget {
+  final int height;
+  final Function callBackFunction;
+  const HeightWidget(this.height, this.callBackFunction, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpandedContainer(
+      child: StretchedColumn(children: [
+        const Text(
+          "HEIGHT",
+          style: kTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+
+          /// textBaseline MUST BE specified in order to use
+          /// .baseline alignment. Otherwise, flutter won't know
+          /// which baseline to align against.
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(
+              height.toString(),
+              style: kBoldTextStyle,
+            ),
+            const Text(
+              'cm',
+              style: kTextStyle,
+            )
+          ],
+        ),
+        Slider(
+          value: height.toDouble(),
+          onChanged: (double n) {
+            callBackFunction(n.toInt());
+          },
+          min: kMinHeight,
+          max: kMaxHeight,
+        ),
+      ]),
+    );
+  }
+}
+
 class StretchedColumn extends StatelessWidget {
   final List<Widget> children;
   const StretchedColumn({super.key, required this.children});

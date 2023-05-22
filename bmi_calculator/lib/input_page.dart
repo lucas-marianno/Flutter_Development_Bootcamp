@@ -22,6 +22,12 @@ class _InputPageState extends State<InputPage> {
     });
   }
 
+  void _updateHeight(int h) {
+    setState(() {
+      height = h;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,46 +56,7 @@ class _InputPageState extends State<InputPage> {
                       ],
                     ),
                   ),
-                  ExpandedContainer(
-                    child: StretchedColumn(children: [
-                      const Text(
-                        "HEIGHT",
-                        style: kTextStyle,
-                        textAlign: TextAlign.center,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-
-                        /// textBaseline MUST BE specified in order to use
-                        /// .baseline alignment. Otherwise, flutter won't know
-                        /// which baseline to align against.
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            height.toString(),
-                            style: kBoldTextStyle,
-                            textAlign: TextAlign.center,
-                          ),
-                          const Text(
-                            'cm',
-                            style: kTextStyle,
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
-                      Slider(
-                        value: height.toDouble(),
-                        onChanged: (double n) {
-                          setState(() {
-                            height = n.toInt();
-                          });
-                        },
-                        min: kMinHeight,
-                        max: kMaxHeight,
-                      ),
-                    ]),
-                  ),
+                  HeightWidget(height, _updateHeight),
                   const Expanded(
                     child: StretchedRow(
                       children: [

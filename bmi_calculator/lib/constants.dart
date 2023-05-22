@@ -33,3 +33,8 @@ const TextStyle kBoldTextStyle = TextStyle(
   letterSpacing: kLetterSpacing,
   fontWeight: FontWeight.bold,
 );
+
+// Defines whether some ThemeDatas will be applied or not
+const bool kAppBarThemeData = true;
+const bool kColorSchemeThemeData = true;
+const bool kSliderThemeData = true;
