@@ -4,6 +4,8 @@ import 'constants.dart';
 
 enum Gender { male, female, none }
 
+enum Operator { subtract, add }
+
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
 
@@ -12,19 +14,33 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Gender selectedGender = Gender.none;
-  int height = 165;
+  int _age = 30;
+  Gender _selectedGender = Gender.none;
+  int _height = 165;
+  int _weight = 90;
+
+  void _updateAge(int a) {
+    setState(() {
+      _age = a;
+    });
+  }
 
   void _updateColor(Gender gender) {
     // Toggles genderCard colors
     setState(() {
-      selectedGender = gender;
+      _selectedGender = gender;
     });
   }
 
   void _updateHeight(int h) {
     setState(() {
-      height = h;
+      _height = h;
+    });
+  }
+
+  void _updateWeight(int w) {
+    setState(() {
+      _weight = w;
     });
   }
 
@@ -51,17 +67,18 @@ class _InputPageState extends State<InputPage> {
                   Expanded(
                     child: StretchedRow(
                       children: [
-                        GenderCard(Gender.male, selectedGender, _updateColor),
-                        GenderCard(Gender.female, selectedGender, _updateColor),
+                        GenderCard(Gender.male, _selectedGender, _updateColor),
+                        GenderCard(
+                            Gender.female, _selectedGender, _updateColor),
                       ],
                     ),
                   ),
-                  HeightWidget(height, _updateHeight),
-                  const Expanded(
+                  HeightWidget(_height, _updateHeight),
+                  Expanded(
                     child: StretchedRow(
                       children: [
-                        ExpandedContainer(),
-                        ExpandedContainer(),
+                        WeightAgeWidget('WEIGHT', _weight, _updateWeight),
+                        WeightAgeWidget('AGE', _age, _updateAge),
                       ],
                     ),
                   ),

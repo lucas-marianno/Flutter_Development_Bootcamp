@@ -4,8 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'constants.dart';
 
 class ExpandedContainer extends StatelessWidget {
-  final Widget? child;
   final Color? backgroundColor;
+  final Widget? child;
 
   const ExpandedContainer({super.key, this.child, this.backgroundColor});
 
@@ -16,7 +16,7 @@ class ExpandedContainer extends StatelessWidget {
         margin: const EdgeInsets.all(kMargin),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(kBorderRadius),
-          color: backgroundColor ?? kActiveCardColor,
+          color: backgroundColor ?? kInactiveCardColor,
         ),
         child: Center(child: child),
       ),
@@ -25,8 +25,8 @@ class ExpandedContainer extends StatelessWidget {
 }
 
 class GenderCard extends StatelessWidget {
-  final Gender gender;
   final Gender activeGender;
+  final Gender gender;
   final Function callbackFunction;
 
   const GenderCard(this.gender, this.activeGender, this.callbackFunction,
@@ -59,8 +59,8 @@ class GenderCard extends StatelessWidget {
 }
 
 class HeightWidget extends StatelessWidget {
-  final int height;
   final Function callBackFunction;
+  final int height;
   const HeightWidget(this.height, this.callBackFunction, {super.key});
 
   @override
@@ -104,6 +104,41 @@ class HeightWidget extends StatelessWidget {
   }
 }
 
+class RoundButton extends StatelessWidget {
+  final Function function;
+  final Operator op;
+  final int weight;
+  const RoundButton(this.op, this.weight, this.function, {super.key});
+
+  IconData _operator(Operator op) {
+    return op == Operator.subtract
+        ? FontAwesomeIcons.minus
+        : FontAwesomeIcons.plus;
+  }
+
+  int _newWeight() {
+    return op == Operator.subtract ? weight - 1 : weight + 1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => function(_newWeight()),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: kActiveCardColor,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          _operator(op),
+          size: kIconSize / 2,
+        ),
+      ),
+    );
+  }
+}
+
 class StretchedColumn extends StatelessWidget {
   final List<Widget> children;
   const StretchedColumn({super.key, required this.children});
@@ -128,6 +163,53 @@ class StretchedRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: children,
+    );
+  }
+}
+
+class WeightAgeWidget extends StatelessWidget {
+  final Function callBackFunction;
+  final String label;
+  final int value;
+  const WeightAgeWidget(this.label, this.value, this.callBackFunction,
+      {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpandedContainer(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            style: kTextStyle,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            mainAxisAlignment: MainAxisAlignment.center,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                value.toString(),
+                style: kBoldTextStyle,
+              ),
+              Text(
+                label == 'WEIGHT' ? 'kg' : '',
+                style: kTextStyle,
+              ),
+            ],
+          ),
+          const SizedBox(height: kGap),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RoundButton(Operator.subtract, value, callBackFunction),
+              const SizedBox(width: kGap),
+              RoundButton(Operator.add, value, callBackFunction),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
