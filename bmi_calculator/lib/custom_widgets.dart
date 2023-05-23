@@ -203,7 +203,7 @@ class WeightAgeWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RoundButton(Operator.subtract, value, callBackFunction),
-              const SizedBox(width: kGap * 2),
+              const SizedBox(width: kGap),
               RoundButton(Operator.add, value, callBackFunction),
             ],
           )
