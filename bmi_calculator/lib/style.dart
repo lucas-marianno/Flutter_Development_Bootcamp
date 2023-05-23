@@ -16,6 +16,10 @@ ThemeData themeData = ThemeData(
           primary: kAccentColor,
         )
       : const ColorScheme.light(),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: kActiveCardColor,
+    foregroundColor: Colors.white,
+  ),
   sliderTheme: kSliderThemeData
       ? const SliderThemeData(
           //thumbColor: Colors.amber,

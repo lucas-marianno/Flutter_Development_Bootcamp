@@ -40,17 +40,25 @@ class GenderCard extends StatelessWidget {
     String label = gender == Gender.male ? "MALE" : "FEMALE";
 
     return Expanded(
-      child: GestureDetector(
-        onTap: () => callbackFunction(gender),
-        child: ExpandedContainer(
-          backgroundColor:
-              activeGender == gender ? kActiveCardColor : kInactiveCardColor,
-          child: StretchedColumn(
-            children: [
-              Icon(icon, size: kIconSize),
-              const SizedBox(height: kGap),
-              Center(child: Text(label, style: kTextStyle)),
-            ],
+      child: Container(
+        margin: const EdgeInsets.all(kMargin),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(kBorderRadius),
+          onTap: () => callbackFunction(gender),
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(kBorderRadius),
+              color: activeGender == gender
+                  ? kActiveCardColor
+                  : kInactiveCardColor,
+            ),
+            child: StretchedColumn(
+              children: [
+                Icon(icon, size: kIconSize),
+                const SizedBox(height: kGap),
+                Center(child: Text(label, style: kTextStyle)),
+              ],
+            ),
           ),
         ),
       ),
@@ -111,9 +119,7 @@ class RoundButton extends StatelessWidget {
   const RoundButton(this.op, this.weight, this.function, {super.key});
 
   IconData _operator(Operator op) {
-    return op == Operator.subtract
-        ? FontAwesomeIcons.minus
-        : FontAwesomeIcons.plus;
+    return op == Operator.subtract ? Icons.remove : Icons.add;
   }
 
   int _newWeight() {
@@ -122,18 +128,11 @@ class RoundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => function(_newWeight()),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: kActiveCardColor,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Icon(
-          _operator(op),
-          size: kIconSize / 2,
-        ),
+    return FloatingActionButton(
+      onPressed: () => function(_newWeight()),
+      child: Icon(
+        _operator(op),
+        size: kIconSize / 2,
       ),
     );
   }
@@ -204,7 +203,7 @@ class WeightAgeWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RoundButton(Operator.subtract, value, callBackFunction),
-              const SizedBox(width: kGap),
+              const SizedBox(width: kGap * 2),
               RoundButton(Operator.add, value, callBackFunction),
             ],
           )
