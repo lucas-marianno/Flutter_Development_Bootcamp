@@ -18,15 +18,14 @@ class Screen0 extends StatelessWidget {
             ElevatedButton(
               child: const Text('Go To Screen 1'),
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/first');
               },
             ),
             ElevatedButton(
               child: const Text('Go To Screen 2'),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Screen2()));
+                    MaterialPageRoute(builder: (context) => const Screen2()));
               },
             ),
           ],

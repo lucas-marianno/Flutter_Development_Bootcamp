@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_navigation_demo/screen0.dart';
 
 class Screen2 extends StatelessWidget {
   const Screen2({super.key});
@@ -16,15 +15,14 @@ class Screen2 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: const Text('Go Back To Screen 1'),
+              child: const Text('Pop this screen'),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Screen0()));
+                  Navigator.popUntil(context, (route) => route.isFirst);
                 },
                 child: const Text('Go to Screen 0'))
           ],
