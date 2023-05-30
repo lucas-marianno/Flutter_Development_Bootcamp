@@ -29,6 +29,12 @@ const TextStyle kTextStyle = TextStyle(
 );
 
 const TextStyle kBoldTextStyle = TextStyle(
+  fontSize: kFontSize * 2,
+  letterSpacing: kLetterSpacing,
+  fontWeight: FontWeight.bold,
+);
+
+const TextStyle kBigBoldTextStyle = TextStyle(
   fontSize: kFontSize * 4,
   letterSpacing: kLetterSpacing,
   fontWeight: FontWeight.bold,

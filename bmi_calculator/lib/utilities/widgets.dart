@@ -1,24 +1,39 @@
-import 'package:bmi_calculator/input_page.dart';
 import 'package:flutter/material.dart';
+import 'package:bmi_calculator/utilities/constants.dart';
+import 'package:bmi_calculator/pages/input_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'constants.dart';
+
+import 'calculator.dart';
 
 class ExpandedContainer extends StatelessWidget {
   final Color? backgroundColor;
   final Widget? child;
+  final int? flex;
+  final double? margin;
+  final double? padding;
 
-  const ExpandedContainer({super.key, this.child, this.backgroundColor});
+  const ExpandedContainer(
+      {super.key,
+      this.backgroundColor,
+      this.child,
+      this.flex,
+      this.margin,
+      this.padding});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: flex ?? 1,
       child: Container(
-        margin: const EdgeInsets.all(kMargin),
+        margin: EdgeInsets.all(padding ?? kMargin),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(kBorderRadius),
           color: backgroundColor ?? kInactiveCardColor,
         ),
-        child: Center(child: child),
+        child: Padding(
+          padding: EdgeInsets.all(margin ?? kPadding),
+          child: Center(child: child),
+        ),
       ),
     );
   }
@@ -91,7 +106,7 @@ class HeightWidget extends StatelessWidget {
           children: [
             Text(
               height.toString(),
-              style: kBoldTextStyle,
+              style: kBigBoldTextStyle,
             ),
             const Text(
               'cm',
@@ -108,6 +123,135 @@ class HeightWidget extends StatelessWidget {
           max: kMaxHeight,
         ),
       ]),
+    );
+  }
+}
+
+class BMIResults extends StatelessWidget {
+  const BMIResults({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                bmi.toStringAsFixed(2),
+                style: kBigBoldTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(width: kGap),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('BMI', style: kBoldTextStyle),
+                  Text(
+                    BMICalculator.category(bmi),
+                    style: TextStyle(
+                      color: BMICalculator.titleColor(bmi),
+                      fontSize: kFontSize,
+                      letterSpacing: kLetterSpacing,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Divider(
+            indent: 20,
+            endIndent: 20,
+            thickness: 2,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BMIResultsInformation extends StatelessWidget {
+  const BMIResultsInformation({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Information'),
+          Row(
+            children: [
+              Expanded(child: Container(height: 3)),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    const Text('Underweight'),
+                    const Text(''),
+                    Container(
+                      height: 3,
+                      color: Colors.lightBlueAccent,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    const Text('Normal'),
+                    const Text(''),
+                    Container(height: 3, color: Colors.green),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    const Text('Overweight'),
+                    const Text(''),
+                    Container(height: 3, color: Colors.orange),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    const Text('Obese'),
+                    const Text(''),
+                    Container(height: 3, color: Colors.red),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(height: 3),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text('16.0'),
+              Text('18.5'),
+              Text('25.0'),
+              Text('30.0'),
+              Text('40.0'),
+            ],
+          ),
+          const Text('link to wikipedia'),
+        ],
+      ),
     );
   }
 }
@@ -129,6 +273,13 @@ class RoundButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      /// If heroTag is not null, it will throw an 'There are multiple heroes
+      /// that share the same tag within a subtree.'error when using navigation.
+      /// To avoid this, either:
+      /// - use only one FloatingActionButton per screen. Or
+      /// - do not use FloatingActionButton at all and custom build the widget. Or
+      /// - set the heroTag to null to avoid the error.
+      heroTag: null,
       onPressed: () => function(_newWeight()),
       child: Icon(
         _operator(op),
@@ -190,7 +341,7 @@ class WeightAgeWidget extends StatelessWidget {
             children: [
               Text(
                 value.toString(),
-                style: kBoldTextStyle,
+                style: kBigBoldTextStyle,
               ),
               Text(
                 label == 'WEIGHT' ? 'kg' : '',
