@@ -258,8 +258,10 @@ class BMIResultsInformation extends StatelessWidget {
                   text: 'here',
                   style: kHyperlinkTextStyle,
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () => launchUrl(Uri.parse(
-                        'https://en.wikipedia.org/wiki/Body_mass_index')),
+                    ..onTap = () => launchUrl(
+                        Uri.parse(
+                            'https://en.wikipedia.org/wiki/Body_mass_index'),
+                        mode: LaunchMode.externalApplication),
                 ),
                 const TextSpan(text: '.'),
               ],
