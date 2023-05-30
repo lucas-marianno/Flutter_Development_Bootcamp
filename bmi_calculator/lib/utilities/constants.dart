@@ -21,12 +21,21 @@ const Color kInactiveText = Color(0xff8d8e98);
 const Color kActiveCardColor = Color(0xff1d1e33);
 const Color kInactiveCardColor = Color(0xff111328);
 
+const Color kUnderweight = Colors.lightBlueAccent;
+const Color kNormalWeight = Colors.green;
+const Color kOverweight = Colors.orange;
+const Color kObese = Colors.red;
+
 // Constant Text Styles:
 const TextStyle kTextStyle = TextStyle(
   color: kActiveText,
   letterSpacing: kLetterSpacing,
   fontSize: kFontSize,
 );
+const TextStyle kHyperlinkTextStyle = TextStyle(
+    color: Color.fromARGB(255, 144, 202, 249),
+    fontStyle: FontStyle.italic,
+    decoration: TextDecoration.underline);
 
 const TextStyle kBoldTextStyle = TextStyle(
   fontSize: kFontSize * 2,

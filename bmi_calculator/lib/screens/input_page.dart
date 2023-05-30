@@ -2,13 +2,10 @@ import 'package:bmi_calculator/utilities/calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:bmi_calculator/utilities/widgets.dart';
 import 'package:bmi_calculator/utilities/constants.dart';
-import 'package:bmi_calculator/pages/results_page.dart';
 
 enum Gender { male, female, none }
 
 enum Operator { subtract, add }
-
-double bmi = 0;
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -90,22 +87,12 @@ class _InputPageState extends State<InputPage> {
               ),
             ),
           ),
-          Expanded(
-            // Calculate button
-            child: ElevatedButton(
-              onPressed: () {
-                bmi = BMICalculator.calculateBMI(_height, _weight);
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ResultsPage()),
-                );
-              },
-              child: const Text(
-                'CALCULATE',
-                style: kTextStyle,
-              ),
-            ),
+          BottomButton(
+            text: 'CALCULATE',
+            onTap: () {
+              BMICalculator.setBMI(_height, _weight);
+              Navigator.pushNamed(context, '/results');
+            },
           ),
         ],
       ),

@@ -11,10 +11,6 @@ class ResultsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Align(
           alignment: Alignment.center,
-          child: Text(
-            'YOUR RESULT',
-            style: kTextStyle,
-          ),
         ),
       ),
       body: StretchedColumn(
@@ -33,15 +29,8 @@ class ResultsPage extends StatelessWidget {
             ),
           ),
           const Spacer(flex: 3),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'RE-CALCULATE',
-                style: kTextStyle,
-              ),
-            ),
-          ),
+          BottomButton(
+              text: 'RE-CALCULATE', onTap: () => Navigator.pop(context)),
         ],
       ),
     );

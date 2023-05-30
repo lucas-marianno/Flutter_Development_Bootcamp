@@ -1,9 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:bmi_calculator/utilities/calculator.dart';
 import 'package:bmi_calculator/utilities/constants.dart';
-import 'package:bmi_calculator/pages/input_page.dart';
+import 'package:bmi_calculator/screens/input_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'calculator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ExpandedContainer extends StatelessWidget {
   final Color? backgroundColor;
@@ -140,7 +141,7 @@ class BMIResults extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                bmi.toStringAsFixed(2),
+                BMICalculator.getBMI().toStringAsFixed(2),
                 style: kBigBoldTextStyle,
                 textAlign: TextAlign.center,
               ),
@@ -150,9 +151,9 @@ class BMIResults extends StatelessWidget {
                 children: [
                   const Text('BMI', style: kBoldTextStyle),
                   Text(
-                    BMICalculator.category(bmi),
+                    BMICalculator.category(),
                     style: TextStyle(
-                      color: BMICalculator.titleColor(bmi),
+                      color: BMICalculator.titleColor(),
                       fontSize: kFontSize,
                       letterSpacing: kLetterSpacing,
                       fontWeight: FontWeight.bold,
@@ -195,7 +196,7 @@ class BMIResultsInformation extends StatelessWidget {
                     const Text(''),
                     Container(
                       height: 3,
-                      color: Colors.lightBlueAccent,
+                      color: kUnderweight,
                     ),
                   ],
                 ),
@@ -206,7 +207,7 @@ class BMIResultsInformation extends StatelessWidget {
                   children: [
                     const Text('Normal'),
                     const Text(''),
-                    Container(height: 3, color: Colors.green),
+                    Container(height: 3, color: kNormalWeight),
                   ],
                 ),
               ),
@@ -216,7 +217,7 @@ class BMIResultsInformation extends StatelessWidget {
                   children: [
                     const Text('Overweight'),
                     const Text(''),
-                    Container(height: 3, color: Colors.orange),
+                    Container(height: 3, color: kOverweight),
                   ],
                 ),
               ),
@@ -226,7 +227,7 @@ class BMIResultsInformation extends StatelessWidget {
                   children: [
                     const Text('Obese'),
                     const Text(''),
-                    Container(height: 3, color: Colors.red),
+                    Container(height: 3, color: kObese),
                   ],
                 ),
               ),
@@ -249,8 +250,45 @@ class BMIResultsInformation extends StatelessWidget {
               Text('40.0'),
             ],
           ),
-          const Text('link to wikipedia'),
+          RichText(
+            text: TextSpan(
+              children: [
+                const TextSpan(text: 'Learn more about BMI categories '),
+                TextSpan(
+                  text: 'here',
+                  style: kHyperlinkTextStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => launchUrl(Uri.parse(
+                        'https://en.wikipedia.org/wiki/Body_mass_index')),
+                ),
+                const TextSpan(text: '.'),
+              ],
+            ),
+          )
         ],
+      ),
+    );
+  }
+}
+
+class BottomButton extends StatelessWidget {
+  final String text;
+  final Function onTap;
+  const BottomButton({
+    required this.text,
+    required this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () => onTap(),
+        child: Text(
+          text,
+          style: kTextStyle,
+        ),
       ),
     );
   }
