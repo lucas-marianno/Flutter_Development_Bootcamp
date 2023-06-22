@@ -28,6 +28,7 @@ class _CityScreenState extends State<CityScreen> {
                 child: TextButton(
                   onPressed: () {},
                   child: const Icon(
+                    // TODO: this should be an appBar(), right?
                     Icons.arrow_back_ios,
                     size: 50.0,
                   ),

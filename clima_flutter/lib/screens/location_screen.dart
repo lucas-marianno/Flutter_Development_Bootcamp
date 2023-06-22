@@ -29,19 +29,19 @@ class _LocationScreenState extends State<LocationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  TextButton(
+                  IconButton(
                     onPressed: () {},
-                    child: const Icon(
+                    icon: const Icon(
                       Icons.near_me,
-                      size: 50.0,
                     ),
+                    iconSize: 50.0,
                   ),
-                  TextButton(
+                  IconButton(
                     onPressed: () {},
-                    child: const Icon(
+                    icon: const Icon(
                       Icons.location_city,
-                      size: 50.0,
                     ),
+                    iconSize: 50.0,
                   ),
                 ],
               ),
