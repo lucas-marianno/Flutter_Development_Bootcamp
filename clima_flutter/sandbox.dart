@@ -3,18 +3,18 @@ void main() {
 }
 
 runTasks() async {
-  // task1();
-  // String data = await task2();
-  // task3(data);
+  task1();
+  String data = await task2();
+  task3(data);
   // print(task2()); // prints Future<String>
   // print(await task2()); // prints String
-  print(taskA());
-  Future.value(() {
-    print(taskB());
-    return taskB();
-  }());
-  print(taskB());
-  print(taskC());
+  // print(taskA());
+  // Future.value(() {
+  //   print(taskB());
+  //   return taskB();
+  // }());
+  // print(taskB());
+  // print(taskC());
 }
 
 task1() {
