@@ -12,8 +12,7 @@ class NetworkHelper {
     http.Response response = await http.get(Uri.parse(url));
 
     if (response.statusCode == successfulRequest) {
-      String data = response.body;
-      return jsonDecode(data);
+      return jsonDecode(response.body);
     } else {
       throw 'Problem fetching data! status code ${response.statusCode}';
     }

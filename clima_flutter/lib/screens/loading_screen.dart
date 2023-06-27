@@ -1,11 +1,7 @@
 import 'package:clima_flutter/screens/location_screen.dart';
-import 'package:clima_flutter/services/networking.dart';
+import 'package:clima_flutter/services/weather.dart';
 import 'package:flutter/material.dart';
-import '../services/location.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-//TODO: learn how to hide this API key
-const String apikey = 'b8f6d3242a3e54f9daa6e29546532bc9';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -21,22 +17,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
     getLocationData();
   }
 
-  Future<void> getLocationData() async {
-    Location location = Location();
-    await location.getCurrentLocation();
-    double lat = location.latitude;
-    double lon = location.longitude;
+  void getLocationData() async {
+    WeatherModel weatherModel = WeatherModel();
+    await weatherModel.getLocationData();
 
-    NetworkHelper network = NetworkHelper(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apikey&units=metric');
-
-    var weatherData = await network.getdata();
-
-    exitLoadingScreen(weatherData);
+    exitLoadingScreen(weatherModel);
   }
 
-  void exitLoadingScreen(weatherData) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LocationScreen(weatherData)));
+  void exitLoadingScreen(weatherModel) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LocationScreen(weatherModel)));
   }
 
   @override

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:clima_flutter/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen(this.weatherData, {super.key});
-  final weatherData;
+  const LocationScreen(this.weatherModel, {super.key});
+  final WeatherModel weatherModel;
 
   @override
   State<LocationScreen> createState() => _LocationScreenState();
@@ -20,20 +20,18 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     super.initState();
-    updateUi(widget.weatherData);
-    getWeatherModel();
+
+    updateUi(widget.weatherModel);
   }
 
-  void updateUi(weatherData) {
-    temp = (weatherData['main']['temp']).toInt();
-    id = weatherData['weather'][0]['id'];
-    cityName = weatherData['name'];
-  }
-
-  void getWeatherModel() {
-    WeatherModel model = WeatherModel();
-    weatherIcon = model.getWeatherIcon(id);
-    message = model.getMessage(temp);
+  void updateUi(WeatherModel weatherModel) {
+    setState(() {
+      temp = (weatherModel.weatherData['main']['temp']).toInt();
+      id = weatherModel.weatherData['weather'][0]['id'];
+      cityName = weatherModel.weatherData['name'];
+      weatherIcon = weatherModel.getWeatherIcon(id);
+      message = weatherModel.getMessage(temp);
+    });
   }
 
   @override
@@ -57,7 +55,10 @@ class _LocationScreenState extends State<LocationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: complete updating the location
+                      manualLocation(context);
+                    },
                     icon: const Icon(
                       Icons.near_me,
                     ),
@@ -90,7 +91,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 15.0),
                 child: Text(
-                  '$message in $cityName',
+                  '$message in $cityName!',
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
@@ -101,4 +102,48 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
+}
+
+Future<({double latitude, double longitude})> manualLocation(context) async {
+  double lon = 0;
+  double lat = 0;
+  await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      title: const Text('Enter manual Location'),
+      content: SizedBox(
+        height: 150,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Enter latitude'),
+              onChanged: (value) {
+                lat = double.parse(value);
+              },
+            ),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Enter longitude'),
+              onChanged: (value) {
+                lon = double.parse(value);
+              },
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('ok'),
+        ),
+      ],
+    ),
+  );
+
+  return (latitude: lat, longitude: lon);
 }
