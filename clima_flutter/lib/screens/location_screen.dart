@@ -55,9 +55,9 @@ class _LocationScreenState extends State<LocationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   IconButton(
-                    onPressed: () {
-                      // TODO: complete updating the location
-                      manualLocation(context);
+                    onPressed: () async {
+                      //
+                      manualLocation(context, updateUi);
                     },
                     icon: const Icon(
                       Icons.near_me,
@@ -104,12 +104,12 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 }
 
-Future<({double latitude, double longitude})> manualLocation(context) async {
+manualLocation(context, Function updateUi) async {
   double lon = 0;
   double lat = 0;
   await showDialog(
     context: context,
-    barrierDismissible: false,
+    //barrierDismissible: false,
     builder: (context) => AlertDialog(
       title: const Text('Enter manual Location'),
       content: SizedBox(
@@ -126,7 +126,7 @@ Future<({double latitude, double longitude})> manualLocation(context) async {
             ),
             TextField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Enter longitude'),
+              decoration: const InputDecoration(labelText: 'Enter longitude'),
               onChanged: (value) {
                 lon = double.parse(value);
               },
@@ -144,6 +144,8 @@ Future<({double latitude, double longitude})> manualLocation(context) async {
       ],
     ),
   );
+  WeatherModel weatherModelFromLocation = WeatherModel();
+  await weatherModelFromLocation.setLocation(lat, lon);
 
-  return (latitude: lat, longitude: lon);
+  updateUi(weatherModelFromLocation);
 }

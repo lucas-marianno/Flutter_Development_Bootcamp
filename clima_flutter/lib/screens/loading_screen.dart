@@ -21,6 +21,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     WeatherModel weatherModel = WeatherModel();
     await weatherModel.getLocationData();
 
+    //TODO: Fix Nullability problems, program crashes in case data is unavailable
+
     exitLoadingScreen(weatherModel);
   }
 
