@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:restart_app/restart_app.dart';
 
-Future<({num lat, num lon})> locationErrorDialog(context, String exception) async {
-  late final ({num lat, num lon}) newLocation;
+locationErrorDialog(context, String exception) async {
+  //late final ({num lat, num lon}) newLocation;
 
-  await showDialog(
+  return await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) => AlertDialog(
@@ -25,22 +26,20 @@ Future<({num lat, num lon})> locationErrorDialog(context, String exception) asyn
         ),
         TextButton(
           onPressed: () async {
-            newLocation = await manualLocationDialog(context);
-            // ignore: use_build_context_synchronously
-            Navigator.pop(context);
+            Navigator.pop(context, await manualLocationDialog(context));
           },
           child: const Text('Manual Location'),
         ),
       ],
     ),
   );
-  return newLocation;
+  //return newLocation;
 }
 
-Future<({num lat, num lon})> manualLocationDialog(context) async {
-  String lat = '0';
-  String lon = '0';
-  await showDialog(
+manualLocationDialog(context) async {
+  num lat = 0;
+  num lon = 0;
+  return await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) => AlertDialog(
@@ -50,18 +49,16 @@ Future<({num lat, num lon})> manualLocationDialog(context) async {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Enter latitude'),
+            NumberOnlyTextField(
+              label: 'Enter Latitude',
               onChanged: (value) {
-                lat = value;
+                lat = num.parse(value);
               },
             ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Enter longitude'),
+            NumberOnlyTextField(
+              label: 'Enter Longitude',
               onChanged: (value) {
-                lon = value;
+                lon = num.parse(value);
               },
             ),
           ],
@@ -70,8 +67,8 @@ Future<({num lat, num lon})> manualLocationDialog(context) async {
       actions: [
         TextButton(
           onPressed: () {
-            if (lat != '0' || lon != '0') {
-              Navigator.pop(context);
+            if (lat != 0 || lon != 0) {
+              Navigator.pop(context, (lat: lat, lon: lon));
             }
           },
           child: const Text('ok'),
@@ -79,6 +76,39 @@ Future<({num lat, num lon})> manualLocationDialog(context) async {
       ],
     ),
   );
+}
 
-  return (lat: num.parse(lat), lon: num.parse(lon));
+enum NumberSet { double, integer, real }
+
+class NumberOnlyTextField extends StatelessWidget {
+  const NumberOnlyTextField({required this.label, required this.onChanged, this.set, super.key});
+
+  final String label;
+  final void Function(String value) onChanged;
+  final NumberSet? set;
+
+  @override
+  Widget build(BuildContext context) {
+    const String double = r'\d|\.|-';
+    const String integer = r'\d|-';
+    const String real = r'\d';
+
+    final Map<NumberSet, String> pattern = {
+      NumberSet.double: double,
+      NumberSet.integer: integer,
+      NumberSet.real: real
+    };
+
+    return TextField(
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(labelText: 'Enter latitude'),
+      onChanged: (value) => onChanged(value),
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+          RegExp(pattern[set] ?? double),
+          replacementString: '',
+        ),
+      ],
+    );
+  }
 }
