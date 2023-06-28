@@ -15,6 +15,7 @@ dependencies:
   geolocator: ^9.0.2
   http: ^1.1.0
   flutter_spinkit: ^5.2.0
+  restart_app: ^1.2.1
 
 dev_dependencies:
   flutter_test:

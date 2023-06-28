@@ -1,6 +1,8 @@
 import 'package:clima_flutter/services/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:clima_flutter/utilities/constants.dart';
+import 'package:restart_app/restart_app.dart';
+import '../services/dialog_alerts.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen(this.weatherModel, {super.key});
@@ -56,13 +58,22 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   IconButton(
                     onPressed: () async {
-                      //
-                      manualLocation(context, updateUi);
+                      final l = await manualLocationDialog(context);
+                      WeatherModel newModel = WeatherModel();
+                      await newModel.setLocation(l.lat, l.lon);
+                      updateUi(newModel);
                     },
                     icon: const Icon(
                       Icons.near_me,
                     ),
                     iconSize: 50.0,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Restart.restartApp();
+                    },
+                    icon: const Icon(Icons.restart_alt),
+                    iconSize: 50,
                   ),
                   IconButton(
                     onPressed: () {},
@@ -102,50 +113,4 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
-}
-
-manualLocation(context, Function updateUi) async {
-  double lon = 0;
-  double lat = 0;
-  await showDialog(
-    context: context,
-    //barrierDismissible: false,
-    builder: (context) => AlertDialog(
-      title: const Text('Enter manual Location'),
-      content: SizedBox(
-        height: 150,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Enter latitude'),
-              onChanged: (value) {
-                lat = double.parse(value);
-              },
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Enter longitude'),
-              onChanged: (value) {
-                lon = double.parse(value);
-              },
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('ok'),
-        ),
-      ],
-    ),
-  );
-  WeatherModel weatherModelFromLocation = WeatherModel();
-  await weatherModelFromLocation.setLocation(lat, lon);
-
-  updateUi(weatherModelFromLocation);
 }
