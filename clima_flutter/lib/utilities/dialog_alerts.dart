@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:restart_app/restart_app.dart';
+import 'country_flag.dart';
+import '../services/geocode.dart';
+
+enum NumberSet { double, integer, real }
+
+const String double = r'\d|\.|-';
+const String integer = r'\d|-';
+const String real = r'\d';
+
+const Map<NumberSet, String> pattern = {
+  NumberSet.double: double,
+  NumberSet.integer: integer,
+  NumberSet.real: real
+};
 
 locationErrorDialog(context, String exception) async {
-  //late final ({num lat, num lon}) newLocation;
-
   return await showDialog(
     context: context,
     barrierDismissible: false,
@@ -33,7 +45,6 @@ locationErrorDialog(context, String exception) async {
       ],
     ),
   );
-  //return newLocation;
 }
 
 manualLocationDialog(context) async {
@@ -41,28 +52,30 @@ manualLocationDialog(context) async {
   num lon = 0;
   return await showDialog(
     context: context,
-    barrierDismissible: false,
+    // barrierDismissible: false,
     builder: (context) => AlertDialog(
       title: const Text('Enter manual Location'),
-      content: SizedBox(
-        height: 150,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            NumberOnlyTextField(
-              label: 'Enter Latitude',
-              onChanged: (value) {
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          NumberOnlyTextField(
+            label: 'Enter Latitude',
+            onChanged: (value) {
+              if (value != '-') {
                 lat = num.parse(value);
-              },
-            ),
-            NumberOnlyTextField(
-              label: 'Enter Longitude',
-              onChanged: (value) {
+              }
+            },
+          ),
+          NumberOnlyTextField(
+            label: 'Enter Longitude',
+            onChanged: (value) {
+              if (value != '-') {
                 lon = num.parse(value);
-              },
-            ),
-          ],
-        ),
+              }
+            },
+          ),
+        ],
       ),
       actions: [
         TextButton(
@@ -78,7 +91,39 @@ manualLocationDialog(context) async {
   );
 }
 
-enum NumberSet { double, integer, real }
+multipleCityDialog(context, List<City> cityList) async {
+  List<Widget> listOfCountries(context, List<City> cityList) {
+    List<Widget> list = [];
+    for (City city in cityList) {
+      String name = city.name;
+      String flag = countryFlag(city.country);
+      String state = city.state;
+
+      list.add(ListTile(
+        leading: Text(flag),
+        title: Text('$name / $state'),
+        trailing: Text(city.country),
+        titleTextStyle: const TextStyle(fontSize: 20),
+        leadingAndTrailingTextStyle: const TextStyle(fontSize: 20),
+        onTap: () {
+          Navigator.pop(context, (lat: city.lat, lon: city.lon));
+        },
+      ));
+    }
+    return list;
+  }
+
+  return await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: listOfCountries(context, cityList),
+      ),
+    ),
+  );
+}
 
 class NumberOnlyTextField extends StatelessWidget {
   const NumberOnlyTextField({required this.label, required this.onChanged, this.set, super.key});
@@ -89,16 +134,6 @@ class NumberOnlyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String double = r'\d|\.|-';
-    const String integer = r'\d|-';
-    const String real = r'\d';
-
-    final Map<NumberSet, String> pattern = {
-      NumberSet.double: double,
-      NumberSet.integer: integer,
-      NumberSet.real: real
-    };
-
     return TextField(
       keyboardType: TextInputType.number,
       decoration: const InputDecoration(labelText: 'Enter latitude'),

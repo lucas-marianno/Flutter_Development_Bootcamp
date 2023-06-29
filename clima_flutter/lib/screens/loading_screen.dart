@@ -2,7 +2,7 @@ import 'package:clima_flutter/screens/location_screen.dart';
 import 'package:clima_flutter/services/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../services/dialog_alerts.dart';
+import '../utilities/dialog_alerts.dart';
 import '../services/location.dart';
 
 class LoadingScreen extends StatefulWidget {

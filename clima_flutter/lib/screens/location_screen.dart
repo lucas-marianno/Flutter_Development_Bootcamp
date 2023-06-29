@@ -3,7 +3,7 @@ import 'package:clima_flutter/services/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:clima_flutter/utilities/constants.dart';
 import 'package:restart_app/restart_app.dart';
-import '../services/dialog_alerts.dart';
+import '../utilities/dialog_alerts.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen(this.weatherModel, {super.key});
@@ -17,6 +17,7 @@ class _LocationScreenState extends State<LocationScreen> {
   late int temp;
   late int id;
   late String cityName;
+  late String country;
   late String weatherIcon;
   late String message;
 
@@ -29,11 +30,12 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void updateUi(WeatherModel weatherModel) {
     setState(() {
-      temp = (weatherModel.weatherData['main']['temp']).toInt();
-      id = weatherModel.weatherData['weather'][0]['id'];
-      cityName = weatherModel.weatherData['name'];
+      temp = (weatherModel.weatherData['main']['temp']).toInt() ?? 0;
+      id = weatherModel.weatherData['weather'][0]['id'] ?? 0;
+      cityName = weatherModel.weatherData['name'] ?? '';
       weatherIcon = weatherModel.getWeatherIcon(id);
       message = weatherModel.getMessage(temp);
+      country = weatherModel.weatherData['sys']['country'] ?? '';
     });
   }
 
@@ -60,9 +62,11 @@ class _LocationScreenState extends State<LocationScreen> {
                   IconButton(
                     onPressed: () async {
                       final l = await manualLocationDialog(context);
-                      WeatherModel newModel = WeatherModel();
-                      await newModel.setLocation(l.lat, l.lon);
-                      updateUi(newModel);
+                      if (l != null) {
+                        WeatherModel newModel = WeatherModel();
+                        await newModel.setLocation(l.lat, l.lon);
+                        updateUi(newModel);
+                      }
                     },
                     icon: const Icon(
                       Icons.near_me,
@@ -78,13 +82,17 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      var typedCityName = await Navigator.push(
+                      final l = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: ((context) => const CityScreen()),
                         ),
                       );
-                      print(typedCityName);
+                      if (l != null) {
+                        WeatherModel newModel = WeatherModel();
+                        await newModel.setLocation(l.lat, l.lon);
+                        updateUi(newModel);
+                      }
                     },
                     icon: const Icon(
                       Icons.location_city,
@@ -111,7 +119,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 15.0),
                 child: Text(
-                  '$message in $cityName!',
+                  '$message in $cityName - $country!',
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),

@@ -1,3 +1,5 @@
+import 'package:clima_flutter/utilities/dialog_alerts.dart';
+import 'package:clima_flutter/services/geocode.dart';
 import 'package:flutter/material.dart';
 import 'package:clima_flutter/utilities/constants.dart';
 
@@ -10,9 +12,30 @@ class CityScreen extends StatefulWidget {
 
 class _CityScreenState extends State<CityScreen> {
   String cityName = '';
+  List<City> cityList = [];
+
+  exit() async {
+    if (cityName != '') {
+      Geocoding geocode = Geocoding();
+      await geocode.fetchData(cityName);
+
+      if (geocode.hasData) {
+        // ignore: use_build_context_synchronously
+        var coord = await multipleCityDialog(context, geocode.cityList);
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context, coord);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -24,18 +47,6 @@ class _CityScreenState extends State<CityScreen> {
         child: SafeArea(
           child: Column(
             children: <Widget>[
-              Align(
-                alignment: Alignment.topLeft,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, cityName);
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 50.0,
-                  ),
-                ),
-              ),
               Container(
                 padding: const EdgeInsets.all(20.0),
                 child: TextField(
@@ -44,10 +55,15 @@ class _CityScreenState extends State<CityScreen> {
                   onChanged: (value) {
                     cityName = value;
                   },
+                  onSubmitted: (value) {
+                    exit();
+                  },
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  exit();
+                },
                 child: const Text(
                   'Get Weather',
                   style: kButtonTextStyle,

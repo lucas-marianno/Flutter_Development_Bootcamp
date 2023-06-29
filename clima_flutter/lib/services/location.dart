@@ -1,10 +1,9 @@
 import 'package:geolocator/geolocator.dart';
 
 class Location {
-  late double lat;
-  late double lon;
-
-  late String status;
+  double lat = 0;
+  double lon = 0;
+  String status = 'null';
 
   getCurrentLocation() async {
     try {
@@ -18,8 +17,6 @@ class Location {
       await Geolocator.checkPermission();
     } catch (e) {
       status = e.toString();
-      lat = 0;
-      lon = 0;
     }
   }
 }
