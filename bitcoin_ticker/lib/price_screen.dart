@@ -1,4 +1,7 @@
+import 'package:bitcoin_ticker/coin_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:io';
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({super.key});
@@ -8,6 +11,52 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
+  String selectedCurrency = 'USD';
+  List<DropdownMenuItem<String>> dropDownMenuItemList = [];
+  List<Widget> cupertinoPickerItenList = [];
+  Widget currencySelector = const Placeholder();
+
+  bool a = Platform.isAndroid;
+  void getDropDownItens() {
+    for (String currency in currenciesList) {
+      dropDownMenuItemList.add(DropdownMenuItem(value: currency, child: Text(currency)));
+    }
+  }
+
+  void getPickerItens() {
+    for (String currency in currenciesList) {
+      cupertinoPickerItenList.add(Text(currency));
+    }
+  }
+
+  void createCurrencySelector() {
+    if (Platform.isIOS) {
+      getPickerItens();
+      currencySelector = CupertinoPicker(
+        itemExtent: 30,
+        onSelectedItemChanged: (value) {},
+        children: cupertinoPickerItenList,
+      );
+    } else {
+      getDropDownItens();
+      currencySelector = DropdownButton<String>(
+        onChanged: (value) {
+          setState(() {
+            selectedCurrency = value!;
+          });
+        },
+        value: selectedCurrency,
+        items: dropDownMenuItemList,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    createCurrencySelector();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +93,7 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: const EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: null,
+            child: currencySelector,
           ),
         ],
       ),
