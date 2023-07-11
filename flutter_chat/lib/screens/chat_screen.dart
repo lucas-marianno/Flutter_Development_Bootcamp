@@ -3,6 +3,7 @@ import 'package:flutter_chat/constants.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+  static const String name = '/chat';
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
