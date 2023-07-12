@@ -37,7 +37,7 @@ class RoundedButton extends StatelessWidget {
   }
 }
 
-class RoundedTextField extends StatelessWidget {
+class RoundedTextField extends StatefulWidget {
   const RoundedTextField({
     super.key,
     required this.hint,
@@ -50,11 +50,45 @@ class RoundedTextField extends StatelessWidget {
   final Function(String value) onChanged;
 
   @override
+  State<RoundedTextField> createState() => _RoundedTextFieldState();
+}
+
+class _RoundedTextFieldState extends State<RoundedTextField> {
+  bool isObscure = false;
+  Widget? sufixIcon;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.hint.contains('password')) {
+      isObscure = true;
+      sufixIcon = IconButton(
+        onPressed: () => toggleVisibility(),
+        icon: const Icon(Icons.visibility_off),
+      );
+    }
+  }
+
+  toggleVisibility() {
+    setState(() {
+      isObscure = isObscure ? false : true;
+      sufixIcon = IconButton(
+        onPressed: () => toggleVisibility(),
+        icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility),
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged: (value) => onChanged(value),
+      keyboardType: isObscure ? null : TextInputType.emailAddress,
+      obscureText: isObscure,
+      onChanged: (value) => widget.onChanged(value),
       decoration: InputDecoration(
-        hintText: hint,
+        suffixIcon: sufixIcon,
+        hintText: widget.hint,
         hintStyle: const TextStyle(color: Colors.grey),
         contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         border: const OutlineInputBorder(
@@ -62,14 +96,14 @@ class RoundedTextField extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: outlineColor,
+            color: widget.outlineColor,
             width: 2,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(32.0)),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: outlineColor,
+            color: widget.outlineColor,
             width: 4,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(32.0)),
