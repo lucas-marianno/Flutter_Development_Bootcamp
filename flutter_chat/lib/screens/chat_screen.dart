@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/constants.dart';
@@ -12,12 +13,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final auth = FirebaseAuth.instance;
-  User? user;
+  final firestore = FirebaseFirestore.instance;
+  String messageText = '';
+  late User user;
 
   @override
   void initState() {
     super.initState();
-    user = auth.currentUser;
+    user = auth.currentUser!;
   }
 
   @override
@@ -28,8 +31,10 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: <Widget>[
           IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () {
-                //Implement logout functionality
+              onPressed: () async {
+                await auth.signOut();
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
               }),
         ],
         title: const Text('⚡️Chat'),
@@ -48,7 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: TextField(
                       onChanged: (value) {
-                        //Do something with the user input.
+                        messageText = value;
                       },
                       decoration: kMessageTextFieldDecoration,
                     ),
@@ -56,6 +61,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   OutlinedButton(
                     onPressed: () {
                       //Implement send functionality.
+                      firestore.collection('messages').add({
+                        'text': messageText,
+                        'senderId': user.email,
+                      });
                     },
                     child: const Text(
                       'Send',
