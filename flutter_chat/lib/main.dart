@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/screens/chat_screen.dart';
 import 'package:flutter_chat/screens/loading_screen.dart';
@@ -5,7 +7,12 @@ import 'package:flutter_chat/screens/login_screen.dart';
 import 'package:flutter_chat/screens/registration_screen.dart';
 import 'package:flutter_chat/screens/welcome_screen.dart';
 
-void main() => runApp(const FlashChat());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initalizeFirebase();
+
+  runApp(const FlashChat());
+}
 
 class FlashChat extends StatelessWidget {
   const FlashChat({super.key});
@@ -27,4 +34,10 @@ class FlashChat extends StatelessWidget {
       initialRoute: LoadingScreen.name,
     );
   }
+}
+
+initalizeFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }

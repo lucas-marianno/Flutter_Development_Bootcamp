@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "556040565774",
+    "project_id": "resenha-chat",
+    "storage_bucket": "resenha-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556040565774:android:a5bcf36f4720f46ad6785f",
+        "android_client_info": {
+          "package_name": "com.example.flutter_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556040565774-lsli4s15thfvi0dq9us8dno2mpqu7ln3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXcETgjf_56m3ZFjRPoySphdRgWwOAg1w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556040565774-lsli4s15thfvi0dq9us8dno2mpqu7ln3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
