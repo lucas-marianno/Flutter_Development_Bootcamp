@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/screens/chat_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import '../main.dart';
 import '../widgets.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -19,6 +20,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool inAsyncCall = false;
 
   void toggleInAsyncCall() => setState(() => inAsyncCall = inAsyncCall ? false : true);
+
+  login() async {
+    toggleInAsyncCall();
+    try {
+      await auth.createUserWithEmailAndPassword(email: email, password: password);
+      if (auth.currentUser != null) {
+        sharedPreferences.setString('userEmail', email);
+        sharedPreferences.setString('userPassword', password);
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(context, ChatScreen.name);
+      }
+      toggleInAsyncCall();
+    } catch (e) {
+      toggleInAsyncCall();
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Registration Failed!'),
+          content: RichText(
+            text: TextSpan(
+              text: e.toString(),
+              style: TextStyle(
+                color: Colors.grey[900],
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +90,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   onChanged: (value) {
                     password = value;
                   },
+                  onSubmitted: (_) => login(),
                 ),
                 const SizedBox(
                   height: 24.0,
@@ -65,37 +98,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 RoundedButton(
                   label: 'Register',
                   color: Colors.blueAccent,
-                  onPressed: () async {
-                    toggleInAsyncCall();
-                    try {
-                      await auth.createUserWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
-                      if (auth.currentUser != null) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushNamed(context, ChatScreen.name);
-                      }
-                      toggleInAsyncCall();
-                    } catch (e) {
-                      toggleInAsyncCall();
-                      await showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Registration Failed!'),
-                          content: RichText(
-                            text: TextSpan(
-                              text: e.toString(),
-                              style: TextStyle(
-                                color: Colors.grey[900],
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
+                  onPressed: () => login(),
                 ),
               ],
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat/screens/chat_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../widgets.dart';
+import 'package:flutter_chat/main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final auth = FirebaseAuth.instance;
+
   String email = '';
   String password = '';
   bool inAsyncCall = false;
@@ -27,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await auth.signInWithEmailAndPassword(email: email, password: password);
 
         if (auth.currentUser != null) {
+          sharedPreferences.setString('userEmail', email);
+          sharedPreferences.setString('userPassword', password);
           // ignore: use_build_context_synchronously
           Navigator.pushNamed(context, ChatScreen.name);
           toggleInAsyncCall();

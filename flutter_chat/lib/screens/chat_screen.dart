@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/constants.dart';
+import 'package:flutter_chat/main.dart';
+import 'package:flutter_chat/screens/welcome_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -18,27 +20,6 @@ class _ChatScreenState extends State<ChatScreen> {
   late User user;
   TextEditingController textEditingController = TextEditingController();
   List<Widget> messagesList = [];
-
-  // getMessages() async {
-  //   await for (var snapshot in firestore.collection('messages').snapshots()) {
-  //     messagesList.clear();
-
-  //     var snapshotDataList = snapshot.docs;
-
-  //     snapshotDataList.sort((a, b) => a.data()['dateTime'].compareTo(b.data()['dateTime']));
-
-  //     for (var message in snapshotDataList) {
-  //       final String sender = message.data()['senderId'].toString();
-  //       messagesList.add(MessageBalloon(
-  //         sender: sender,
-  //         message: message.data()['text'].toString(),
-  //         timestamp: message.data()['dateTime'],
-  //         isUserSender: sender == user.email,
-  //       ));
-  //       setState(() {});
-  //     }
-  //   }
-  // }
 
   sendMessage() {
     if (messageText.isNotEmpty) {
@@ -69,8 +50,9 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: const Icon(Icons.close),
               onPressed: () async {
                 await auth.signOut();
+                await sharedPreferences.clear();
                 // ignore: use_build_context_synchronously
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, WelcomeScreen.name);
               }),
         ],
         title: const Text('⚡️Chat'),
