@@ -19,26 +19,26 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<Widget> messagesList = [];
 
-  getMessages() async {
-    await for (var snapshot in firestore.collection('messages2').snapshots()) {
-      messagesList.clear();
+  // getMessages() async {
+  //   await for (var snapshot in firestore.collection('messages2').snapshots()) {
+  //     messagesList.clear();
 
-      var snapshotDataList = snapshot.docs;
+  //     var snapshotDataList = snapshot.docs;
 
-      snapshotDataList.sort((a, b) => a.data()['dateTime'].compareTo(b.data()['dateTime']));
+  //     snapshotDataList.sort((a, b) => a.data()['dateTime'].compareTo(b.data()['dateTime']));
 
-      for (var message in snapshotDataList) {
-        final String sender = message.data()['senderId'].toString();
-        messagesList.add(MessageBalloon(
-          sender: sender,
-          message: message.data()['text'].toString(),
-          timestamp: message.data()['dateTime'],
-          isUserSender: sender == user.email,
-        ));
-        setState(() {});
-      }
-    }
-  }
+  //     for (var message in snapshotDataList) {
+  //       final String sender = message.data()['senderId'].toString();
+  //       messagesList.add(MessageBalloon(
+  //         sender: sender,
+  //         message: message.data()['text'].toString(),
+  //         timestamp: message.data()['dateTime'],
+  //         isUserSender: sender == user.email,
+  //       ));
+  //       setState(() {});
+  //     }
+  //   }
+  // }
 
   sendMessage() {
     if (messageText.isNotEmpty) {
@@ -55,7 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     user = auth.currentUser!;
 
-    getMessages();
+    // getMessages();
   }
 
   @override
@@ -85,11 +85,12 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 reverse: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: messagesList,
-                ),
+                child: MessagesStreamBuilder(firestore: firestore, user: user),
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   crossAxisAlignment: CrossAxisAlignment.stretch,
+                //   children: messagesList,
+                // ),
               ),
             ),
           ),
@@ -118,6 +119,54 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MessagesStreamBuilder extends StatelessWidget {
+  const MessagesStreamBuilder({
+    super.key,
+    required this.firestore,
+    required this.user,
+  });
+
+  final FirebaseFirestore firestore;
+  final User user;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestore.collection('messages2').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final messages = snapshot.data!.docs;
+        messages.sort((a, b) {
+          return ((a.data() as Map<String, dynamic>)['dateTime'] as Timestamp)
+              .compareTo(((b.data() as Map<String, dynamic>)['dateTime'] as Timestamp));
+        });
+
+        List<Widget> messageBubblesList = [];
+
+        for (var message in messages) {
+          final data = message.data() as Map<String, dynamic>;
+          final sender = data['senderId'];
+
+          messageBubblesList.add(MessageBalloon(
+            sender: sender,
+            message: data['text'],
+            timestamp: data['dateTime'],
+            isUserSender: sender == user.email,
+          ));
+        }
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: messageBubblesList,
+        );
+      },
     );
   }
 }
@@ -234,8 +283,4 @@ class MessageBalloon extends StatelessWidget {
       );
     }
   }
-}
-
-String timestampToString(Timestamp ts) {
-  return '';
 }
