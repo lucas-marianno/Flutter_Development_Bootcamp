@@ -43,11 +43,13 @@ class RoundedTextField extends StatefulWidget {
     required this.hint,
     required this.outlineColor,
     required this.onChanged,
+    this.onSubmitted,
   });
 
   final String hint;
   final Color outlineColor;
   final Function(String value) onChanged;
+  final Function(String value)? onSubmitted;
 
   @override
   State<RoundedTextField> createState() => _RoundedTextFieldState();
@@ -86,6 +88,11 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
       keyboardType: isObscure ? null : TextInputType.emailAddress,
       obscureText: isObscure,
       onChanged: (value) => widget.onChanged(value),
+      onSubmitted: (value) {
+        if (widget.onSubmitted != null) {
+          widget.onSubmitted!(value);
+        }
+      },
       decoration: InputDecoration(
         suffixIcon: sufixIcon,
         hintText: widget.hint,

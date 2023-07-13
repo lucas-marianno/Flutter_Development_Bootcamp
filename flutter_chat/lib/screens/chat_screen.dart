@@ -16,11 +16,11 @@ class _ChatScreenState extends State<ChatScreen> {
   final firestore = FirebaseFirestore.instance;
   String messageText = '';
   late User user;
-
+  TextEditingController textEditingController = TextEditingController();
   List<Widget> messagesList = [];
 
   // getMessages() async {
-  //   await for (var snapshot in firestore.collection('messages2').snapshots()) {
+  //   await for (var snapshot in firestore.collection('messages').snapshots()) {
   //     messagesList.clear();
 
   //     var snapshotDataList = snapshot.docs;
@@ -42,11 +42,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   sendMessage() {
     if (messageText.isNotEmpty) {
-      firestore.collection('messages2').add({
+      firestore.collection('messages').add({
         'text': messageText,
         'senderId': user.email,
         'dateTime': DateTime.now(),
       });
+      textEditingController.clear();
     }
   }
 
@@ -80,20 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                reverse: true,
-                child: MessagesStreamBuilder(firestore: firestore, user: user),
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   crossAxisAlignment: CrossAxisAlignment.stretch,
-                //   children: messagesList,
-                // ),
-              ),
-            ),
-          ),
+          MessagesStreamBuilder(firestore: firestore, user: user),
           Container(
             decoration: kMessageContainerDecoration,
             child: Row(
@@ -101,10 +89,10 @@ class _ChatScreenState extends State<ChatScreen> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
-                    controller: TextEditingController(),
+                    controller: textEditingController,
                     decoration: kMessageTextFieldDecoration,
                     onChanged: (value) => messageText = value,
-                    onSubmitted: (_) => sendMessage(),
+                    onEditingComplete: () => sendMessage(),
                   ),
                 ),
                 OutlinedButton(
@@ -136,36 +124,38 @@ class MessagesStreamBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: firestore.collection('messages2').snapshots(),
+      stream: firestore.collection('messages').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
+        } else {
+          final messages = snapshot.data!.docs;
+          messages.sort((a, b) {
+            return ((b.data() as Map<String, dynamic>)['dateTime'] as Timestamp)
+                .compareTo(((a.data() as Map<String, dynamic>)['dateTime'] as Timestamp));
+          });
+
+          List<Widget> messageBubblesList = [];
+
+          for (var message in messages) {
+            final data = message.data() as Map<String, dynamic>;
+            final sender = data['senderId'];
+
+            messageBubblesList.add(MessageBalloon(
+              sender: sender,
+              message: data['text'],
+              timestamp: data['dateTime'],
+              isUserSender: sender == user.email,
+            ));
+          }
+
+          return Expanded(
+            child: ListView(
+              reverse: true,
+              children: messageBubblesList,
+            ),
+          );
         }
-        final messages = snapshot.data!.docs;
-        messages.sort((a, b) {
-          return ((a.data() as Map<String, dynamic>)['dateTime'] as Timestamp)
-              .compareTo(((b.data() as Map<String, dynamic>)['dateTime'] as Timestamp));
-        });
-
-        List<Widget> messageBubblesList = [];
-
-        for (var message in messages) {
-          final data = message.data() as Map<String, dynamic>;
-          final sender = data['senderId'];
-
-          messageBubblesList.add(MessageBalloon(
-            sender: sender,
-            message: data['text'],
-            timestamp: data['dateTime'],
-            isUserSender: sender == user.email,
-          ));
-        }
-
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: messageBubblesList,
-        );
       },
     );
   }
@@ -186,101 +176,61 @@ class MessageBalloon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String datetime = '${timestamp.toDate().hour}:'
-        '${timestamp.toDate().minute}:'
-        '${timestamp.toDate().second}';
-
-    const BoxDecoration decorationReceived = BoxDecoration(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.zero,
-        topRight: Radius.circular(20),
-        bottomLeft: Radius.circular(10),
-        bottomRight: Radius.circular(30),
-      ),
-      color: Color.fromRGBO(224, 224, 224, 1),
-    );
-    const BoxDecoration decorationSent = BoxDecoration(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.zero,
-        bottomLeft: Radius.circular(30),
-        bottomRight: Radius.circular(10),
-      ),
-      color: Color.fromRGBO(189, 189, 189, 1),
-    );
-
-    if (isUserSender) {
-      return Padding(
-        padding: const EdgeInsets.only(
-          top: 10,
-          bottom: 10,
-          left: 50,
-          right: 20,
-        ),
-        child: Container(
-          decoration: decorationSent,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(datetime),
-                    Text(sender, style: const TextStyle(fontSize: 20)),
-                  ],
-                ),
-                RichText(
-                  textAlign: TextAlign.end,
-                  text: TextSpan(
-                    text: message,
-                    style: const TextStyle(
-                      fontSize: 25,
-                      color: Color.fromRGBO(33, 33, 33, 1),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: isUserSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Text(sender, style: const TextStyle(fontSize: 15)),
+          Material(
+            elevation: 5,
+            color: isUserSender ? Colors.lightBlueAccent : Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(isUserSender ? 30 : 0),
+              topRight: Radius.circular(isUserSender ? 0 : 30),
+              bottomLeft: const Radius.circular(30),
+              bottomRight: const Radius.circular(30),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              child: Column(
+                crossAxisAlignment:
+                    isUserSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                children: [
+                  RichText(
+                    textAlign: isUserSender ? TextAlign.end : TextAlign.start,
+                    text: TextSpan(
+                      text: message,
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: isUserSender ? Colors.white : const Color.fromRGBO(33, 33, 33, 1),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Padding(
-        padding: const EdgeInsets.only(
-          top: 10,
-          bottom: 10,
-          left: 20,
-          right: 50,
-        ),
-        child: Container(
-          decoration: decorationReceived,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text(sender, style: const TextStyle(fontSize: 20)), Text(datetime)],
-                ),
-                RichText(
-                  text: TextSpan(
-                    text: message,
-                    style: const TextStyle(
-                      fontSize: 25,
-                      color: Color.fromRGBO(33, 33, 33, 1),
+                  Text(
+                    timestampToString(timestamp),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isUserSender ? Colors.white : const Color.fromRGBO(33, 33, 33, 1),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    }
+        ],
+      ),
+    );
   }
+}
+
+String timestampToString(Timestamp t) {
+  String hour = '${t.toDate().hour}';
+  String minute = '${t.toDate().minute}';
+
+  hour = hour.length == 1 ? '0$hour' : hour;
+  minute = minute.length == 1 ? '0$minute' : minute;
+
+  return '$hour:$minute';
 }
