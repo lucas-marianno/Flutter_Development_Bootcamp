@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/api/firebase_api.dart';
 import 'package:flutter_chat/constants.dart';
 import 'package:flutter_chat/main.dart';
 import 'package:flutter_chat/screens/welcome_screen.dart';
@@ -46,6 +47,11 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
+          IconButton(
+              onPressed: () {
+                FirebaseApi().sendNotification();
+              },
+              icon: const Icon(Icons.send)),
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () async {

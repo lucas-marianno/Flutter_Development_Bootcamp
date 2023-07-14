@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_chat/api/firebase_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ void main() async {
   await initializeSharedPreferences();
   await initalizeFirebase();
   await loginToFirebase();
+  await FirebaseApi().initNotifications();
 
   runApp(const FlashChat());
 }
