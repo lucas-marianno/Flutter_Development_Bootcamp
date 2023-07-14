@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/screens/chat_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import '../api/firebase_api.dart';
 import '../main.dart';
 import '../widgets.dart';
 
@@ -28,6 +29,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (auth.currentUser != null) {
         sharedPreferences.setString('userEmail', email);
         sharedPreferences.setString('userPassword', password);
+        await FirebaseApi().setFCMToken();
         // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, ChatScreen.name);
       }
