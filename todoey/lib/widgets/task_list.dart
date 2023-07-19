@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:todoey/widgets/task_tile.dart';
+import '../task.dart';
 
 class TaskList extends StatelessWidget {
   const TaskList({
     super.key,
+    required this.tasklist,
+    required this.callback,
   });
+
+  final List<Task> tasklist;
+  final void Function() callback;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 3,
+      itemCount: tasklist.length,
       itemBuilder: (context, index) {
-        return const TasksTile();
+        return TaskTile(
+          task: tasklist[index],
+          callback: () {
+            tasklist[index].toggleIsDone();
+            callback();
+          },
+        );
       },
     );
   }

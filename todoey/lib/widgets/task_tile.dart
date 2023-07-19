@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:todoey/constants.dart';
+import '../constants.dart';
+import '../task.dart';
 
-class TasksTile extends StatelessWidget {
-  const TasksTile({
+class TaskTile extends StatelessWidget {
+  const TaskTile({
     super.key,
+    required this.task,
+    required this.callback,
   });
+
+  final Task task;
+  final void Function() callback;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      title: const Text('Buy milk', style: TextStyle(fontSize: kSubTitleFontSize)),
+      title: Text(
+        task.title,
+        style: TextStyle(
+          fontSize: kSubTitleFontSize,
+          decoration: task.isDone ? TextDecoration.lineThrough : null,
+        ),
+      ),
       trailing: Checkbox(
-        value: true,
-        onChanged: (value) {
-          // TODO: implement check action
-        },
+        activeColor: Colors.lightBlueAccent,
+        value: task.isDone,
+        onChanged: (_) => callback(),
       ),
     );
   }

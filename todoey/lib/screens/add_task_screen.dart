@@ -4,10 +4,14 @@ import 'package:todoey/constants.dart';
 class AddTaskScreen extends StatelessWidget {
   const AddTaskScreen({
     super.key,
+    required this.callback,
   });
+
+  final void Function(String newTask) callback;
 
   @override
   Widget build(BuildContext context) {
+    String newTask = '';
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -35,17 +39,21 @@ class AddTaskScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: kSpacerHeight),
-            const TextField(
+            TextField(
               autofocus: true,
               textAlign: TextAlign.center,
-              decoration: InputDecoration(hintText: 'New task'),
-              style: TextStyle(
-                fontSize: kSubTitleFontSize,
-              ),
+              decoration: const InputDecoration(hintText: 'New task'),
+              style: const TextStyle(fontSize: kSubTitleFontSize),
+              onChanged: (value) {
+                newTask = value;
+              },
+              onSubmitted: (value) {
+                callback(newTask);
+              },
             ),
             const SizedBox(height: kSpacerHeight),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => callback(newTask),
               child: const Padding(
                 padding: EdgeInsets.all(kSpacerHeight),
                 child: Text('Add', style: TextStyle(fontSize: kSubTitleFontSize)),

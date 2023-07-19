@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
+import '../task.dart';
 import '../widgets/task_list.dart';
 import 'add_task_screen.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
+
+  @override
+  State<TasksScreen> createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  List<Task> taskList = [
+    Task(title: 'buy shit'),
+    Task(title: 'sell shit'),
+    Task(title: 'clean shit'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +54,9 @@ class TasksScreen extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const Text(
-                  '12 tasks',
-                  style: TextStyle(
+                Text(
+                  '${taskList.length} tasks',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: kSubTitleFontSize,
                   ),
@@ -61,9 +73,12 @@ class TasksScreen extends StatelessWidget {
                   topRight: Radius.circular(kBorderRadius),
                 ),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(kHorizontalPadding),
-                child: TaskList(),
+              child: Padding(
+                padding: const EdgeInsets.all(kHorizontalPadding),
+                child: TaskList(
+                  tasklist: taskList,
+                  callback: () => setState(() {}),
+                ),
               ),
             ),
           )
@@ -72,11 +87,16 @@ class TasksScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
         onPressed: () {
-          // TODO: Slide up a new tasklist
           showModalBottomSheet(
             backgroundColor: Colors.transparent,
             context: context,
-            builder: (_) => const AddTaskScreen(),
+            builder: (_) => AddTaskScreen(
+              callback: (newTask) {
+                taskList.add(Task(title: newTask));
+                Navigator.pop(context);
+                setState(() {});
+              },
+            ),
           );
         },
         child: const Icon(Icons.add),
