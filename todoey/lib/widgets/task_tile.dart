@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../util/constants.dart';
 import '../util/task.dart';
 
@@ -6,11 +7,9 @@ class TaskTile extends StatelessWidget {
   const TaskTile({
     super.key,
     required this.task,
-    required this.callback,
   });
 
   final Task task;
-  final void Function() callback;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,10 @@ class TaskTile extends StatelessWidget {
       trailing: Checkbox(
         activeColor: Colors.lightBlueAccent,
         value: task.isDone,
-        onChanged: (_) => callback(),
+        onChanged: (_) => Provider.of<Tasks>(
+          context,
+          listen: false,
+        ).replaceTask(task, task.toggleIsDone()),
       ),
     );
   }

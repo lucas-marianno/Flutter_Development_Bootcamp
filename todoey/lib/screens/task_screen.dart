@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoey/util/constants.dart';
 import '../util/task.dart';
 import '../widgets/task_list.dart';
 import 'add_task_screen.dart';
 
-class TasksScreen extends StatefulWidget {
-  const TasksScreen({super.key});
-
-  @override
-  State<TasksScreen> createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  List<Task> taskList = [
-    Task(title: 'buy shit'),
-    Task(title: 'sell shit'),
-    Task(title: 'clean shit'),
-  ];
+class TaskScreen extends StatelessWidget {
+  const TaskScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<Task> taskList = Provider.of<Tasks>(context).getTaskList();
+
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // custom app bar
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: kHorizontalPadding,
@@ -64,6 +57,7 @@ class _TasksScreenState extends State<TasksScreen> {
               ],
             ),
           ),
+          // task list
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -73,17 +67,15 @@ class _TasksScreenState extends State<TasksScreen> {
                   topRight: Radius.circular(kBorderRadius),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(kHorizontalPadding),
-                child: TaskList(
-                  tasklist: taskList,
-                  callback: () => setState(() {}),
-                ),
+              child: const Padding(
+                padding: EdgeInsets.all(kHorizontalPadding),
+                child: TaskList(),
               ),
             ),
           )
         ],
       ),
+      // floating action button
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
         onPressed: () {
@@ -92,9 +84,8 @@ class _TasksScreenState extends State<TasksScreen> {
             context: context,
             builder: (_) => AddTaskScreen(
               callback: (newTask) {
-                taskList.add(Task(title: newTask));
+                Provider.of<Tasks>(context, listen: false).addTask(Task(title: newTask));
                 Navigator.pop(context);
-                setState(() {});
               },
             ),
           );
