@@ -8,11 +8,10 @@ class TaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Task> taskList = Provider.of<Tasks>(context).getTaskList();
-
     return ListView.builder(
-      itemCount: taskList.length,
-      itemBuilder: (context, index) => TaskTile(task: taskList[index]),
+      itemCount: Provider.of<Tasks>(context).taskCount,
+      itemBuilder: (context, index) =>
+          TaskTile(task: Provider.of<Tasks>(context).getTaskList()[index]),
     );
   }
 }

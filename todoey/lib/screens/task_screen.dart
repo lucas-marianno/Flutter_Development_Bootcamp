@@ -10,8 +10,6 @@ class TaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Task> taskList = Provider.of<Tasks>(context).getTaskList();
-
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       body: Column(
@@ -48,7 +46,7 @@ class TaskScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${taskList.length} tasks',
+                  '${Provider.of<Tasks>(context).taskCount} tasks',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: kSubTitleFontSize,

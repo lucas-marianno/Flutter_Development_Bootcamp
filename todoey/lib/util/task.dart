@@ -15,6 +15,8 @@ class Task {
 class Tasks extends ChangeNotifier {
   final List<Task> _taskList = [];
 
+  int get taskCount => _taskList.length;
+
   void addTask(Task task) {
     _taskList.add(task);
     notifyListeners();
