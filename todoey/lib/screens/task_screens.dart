@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todoey/constants.dart';
-import '../task.dart';
+import 'package:todoey/util/constants.dart';
+import '../util/task.dart';
 import '../widgets/task_list.dart';
 import 'add_task_screen.dart';
 
