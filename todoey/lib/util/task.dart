@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 class Task {
@@ -13,16 +15,13 @@ class Task {
 }
 
 class Tasks extends ChangeNotifier {
-  final List<Task> _taskList = [];
-
   int get taskCount => _taskList.length;
+  UnmodifiableListView<Task> get taskList => UnmodifiableListView(_taskList);
 
   void addTask(Task task) {
     _taskList.add(task);
     notifyListeners();
   }
-
-  List<Task> getTaskList() => _taskList;
 
   void replaceTask(Task from, Task to) {
     if (!_taskList.contains(from)) return;
@@ -30,4 +29,11 @@ class Tasks extends ChangeNotifier {
     _taskList[_taskList.indexOf(from)] = to;
     notifyListeners();
   }
+
+  void removeTask(Task task) {
+    _taskList.remove(task);
+    notifyListeners();
+  }
+
+  final List<Task> _taskList = [];
 }
